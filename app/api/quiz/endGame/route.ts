@@ -2,6 +2,7 @@ import { z } from "zod";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
 
 const endGameSchema = z.object({
   gameId: z.string(),
@@ -10,11 +11,18 @@ const endGameSchema = z.object({
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { gameId } = endGameSchema.parse(body);
 
-    const game = await db.game.findUnique({
+    const game = await db.game.findFirst({
       where: {
         id: gameId,
+        userId,
       },
     });
 

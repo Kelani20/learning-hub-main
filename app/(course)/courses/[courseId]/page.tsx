@@ -29,7 +29,13 @@ const CourseIdPage = async ({
     return redirect("/sign-in");
   }
 
-  return redirect(`/courses/${course.id}/chapters/${course.chapters[0].id}`);
+  const firstChapter = course.chapters[0];
+
+  if (!firstChapter) {
+    return redirect("/browse");
+  }
+
+  return redirect(`/courses/${course.id}/chapters/${firstChapter.id}`);
 };
 
 export default CourseIdPage;

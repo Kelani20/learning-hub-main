@@ -18,9 +18,10 @@ const OpenEndedPage = async ({
     return redirect("/sign-in");
   }
 
-  const game = await db.game.findUnique({
+  const game = await db.game.findFirst({
     where: {
       id: gameId,
+      userId,
     },
     include: {
       questions: {

@@ -25,9 +25,10 @@ const Statistics = async ({
   if (!userId) {
     return redirect("/sign-in");
   }
-  const game = await db.game.findUnique({
+  const game = await db.game.findFirst({
     where: { 
-      id: gameId 
+      id: gameId,
+      userId,
     },
     include: { 
       questions: true 

@@ -1,156 +1,55 @@
-"use client";
+import { MessageSquare } from "lucide-react";
 
-import { Chat, LoadingIndicator } from "stream-chat-react";
-import { useCallback, useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
-import toast from "react-hot-toast";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { listDiscussionThreads } from "@/lib/discussions";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import useWindowSize from "@/hooks/useWindowSize";
-import { mdBreakpoint } from "@/lib/tailwind";
-import { SideBar } from "./_comonents/chat-sidebar";
-import useInitializeChatClient from "@/lib/chat-client";
-import ChatChannel from "./_comonents/chat-channel";
+import { DiscussionComposer } from "./_components/discussion-composer";
 
-const DiscussionsPage = () => {
-  const chatClient = useInitializeChatClient();
-  const user = {
-    id: "demo_learner",
-    fullName: "Demo Learner",
-    imageUrl: "",
-  } as any;
-  const [channelName, setChannelName] = useState("");
-  const [SidebarOpen, setSidebarOpen] = useState(false);
-  const [isChannelCreated, setIsChannelCreated] = useState(false);
+const displayAuthor = (authorId: string) =>
+  authorId === "demo_instructor" ? "Demo Instructor" : "Demo Learner";
 
-  const windowSize = useWindowSize();
-  const isLargeScreen = windowSize.width >= mdBreakpoint;
-
-  useEffect(() => {
-    if (windowSize.width >= mdBreakpoint) setSidebarOpen(false);
-  }, [windowSize.width]);
-
-  const handleSidebarOnClose = useCallback(() => {
-    setSidebarOpen(false);
-  }, []);
-
-  if (!chatClient || !user) {
-    return (
-      <div className="h-screen flex items-center justify-center">
-        <LoadingIndicator size={40} />
-      </div>
-    );
-  }
-
-  const fetchAllUserIds = async () => {
-    try {
-      // Query all users from Stream Chat (this example fetches user IDs only)
-      const response = await chatClient.queryUsers(
-        { id: { $ne: "current_user_id" } },
-        {},
-        { limit: 100 }
-      );
-      const users = response.users;
-
-      // Extract user IDs from the fetched users
-      const userIds = users.map((user) => user.id);
-
-      return userIds;
-    } catch (error) {
-      // Handle errors if the user query fails
-      console.error("Error fetching user IDs:", error);
-      return [];
-    }
-  };
-  const createChannel = async () => {
-    try {
-      // Trim the channelName to remove leading and trailing whitespaces
-    const trimmedChannelName = channelName.trim();
-
-    // Check if the trimmedChannelName is empty
-    if (!trimmedChannelName) {
-      toast.error("Please type an actual question");
-      return;
-    }
-
-     // Check if a channel with the same name already exists
-     const existingChannel = await chatClient.queryChannels(
-      { name: trimmedChannelName },
-      { }
-    );
-
-    if (existingChannel.length > 0) {
-      toast.error("This question already exists. Please use the channel search");
-      return;
-    }
-
-    const allUserIds = await fetchAllUserIds(); // Wait for fetchAllUserIds to complete
-    const channel = chatClient.channel(
-      "messaging",
-      channelName.replace(/\s/g, ""),
-      {
-        name: channelName,
-        members: [...allUserIds],
-      }
-      );
-
-      await channel.watch();
-      setIsChannelCreated(true); // Update channel creation status
-      toast.success("Channel created");
-    } catch (error) {
-      toast.error("Something went wrong");
-    }
-  };
+const DiscussionsPage = async () => {
+  const threads = await listDiscussionThreads();
 
   return (
-    <div className="h-full bg-gray-100 xl:px-3 xl:py-3">
-      <div className="max-w-[1600px] min-w-[350px] h-[800px] shadow-sm m-auto flex flex-col">
-        <Chat client={chatClient}>
-          <div className="flex flex-row gap-x-5 py-2 items-center justify-center">
-            {!isLargeScreen && (
-              <div className="flex justify-center border-b border-b-[#DBDDE1] p-3 md:hidden">
-                <button onClick={() => setSidebarOpen(!SidebarOpen)}>
-                  {!SidebarOpen ? (
-                    <span className="flex items-center gap-1">
-                      <Menu />
-                    </span>
-                  ) : (
-                    <X />
-                  )}
-                </button>
+    <div className="space-y-6 p-6">
+      <div>
+        <div className="flex items-center gap-2">
+          <MessageSquare className="h-5 w-5 text-sky-600" />
+          <h1 className="text-2xl font-semibold tracking-tight">Discussions</h1>
+        </div>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Ask questions, compare notes, and keep course context close to the lesson work.
+        </p>
+      </div>
+
+      <DiscussionComposer />
+
+      <div className="grid gap-4">
+        {threads.map((thread) => (
+          <Card key={thread.id} className="rounded-md">
+            <CardHeader className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                {thread.course?.title && <Badge variant="secondary">{thread.course.title}</Badge>}
+                <span className="text-xs text-muted-foreground">
+                  Started by {displayAuthor(thread.authorId)}
+                </span>
               </div>
-            )}
-            <Input
-              placeholder="Ask a question"
-              value={channelName}
-              onChange={(e) => setChannelName(e.target.value)}
-              className="mr-2 max-w-4xl md:max-w-md"
-            />
-            {/* <button
-              onClick={createChannel}
-              className="border bg-blue-400 text-white rounded-lg p-1"
-            >
-              Post Question
-            </button> */}
-            <Button
-              onClick={createChannel}
-              >
-              Post
-            </Button>
-          </div>
-          <div className="flex flex-row h-[850px] overflow-y-auto">
-            <SideBar
-              user={user}
-              show={isLargeScreen || SidebarOpen}
-              onClose={handleSidebarOnClose}
-            />
-            <ChatChannel
-              show={isLargeScreen || !SidebarOpen}
-              hideChannelOnThread={!isLargeScreen}
-            />
-          </div>
-        </Chat>
+              <CardTitle className="text-lg">{thread.title}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {thread.messages.map((message) => (
+                <div key={message.id} className="rounded-md bg-slate-50 p-3">
+                  <p className="text-xs font-medium text-slate-500">
+                    {displayAuthor(message.authorId)}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-700">{message.body}</p>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        ))}
       </div>
     </div>
   );

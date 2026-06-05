@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import stringSimilarity from "string-similarity";
 
 import { db } from "@/lib/db";
+import { auth } from "@/lib/auth";
 
 const checkAnswerSchema = z.object({
   userInput: z.string(),
@@ -12,10 +13,19 @@ const checkAnswerSchema = z.object({
 export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { questionId, userInput } = checkAnswerSchema.parse(body);
-    const question = await db.question.findUnique({
+    const question = await db.question.findFirst({
       where: {
         id: questionId,
+        game: {
+          userId,
+        },
       },
     });
 
