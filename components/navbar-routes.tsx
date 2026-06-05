@@ -1,51 +1,45 @@
 "use client";
 
 import { LogOut } from "lucide-react";
-import { UserButton, useAuth } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-import { Button } from "./ui/button";
-import { isAdmin } from "@/lib/admin";
-import { SearchInput } from "./search-input";
+import { DemoUserButton } from "@/components/auth/demo-user-button";
+import { Button } from "@/components/ui/button";
+import { SearchInput } from "@/components/search-input";
 
 const NavbarRoutes = () => {
-  const { userId } = useAuth();
   const pathname = usePathname();
-
-  if (!userId) 
-    return null;
-
   const isAdminPage = pathname?.startsWith("/admin");
   const isCoursePage = pathname?.includes("/courses");
   const isBrowsePage = pathname === "/browse";
 
   return (
     <>
-    {isBrowsePage && (
-      <div className="hidden md:block">
-        <SearchInput />
+      {isBrowsePage && (
+        <div className="hidden md:block">
+          <SearchInput />
+        </div>
+      )}
+      <div className="ml-auto flex items-center gap-2">
+        {isAdminPage || isCoursePage ? (
+          <Link href="/dashboard">
+            <Button size="sm" variant="ghost">
+              <LogOut className="mr-2 h-4 w-4" />
+              Exit
+            </Button>
+          </Link>
+        ) : (
+          <Link href="/admin/courses">
+            <Button size="sm" variant="ghost">
+              Instructor View
+            </Button>
+          </Link>
+        )}
+        <DemoUserButton />
       </div>
-    )}
-    <div className="flex gap-2 ml-auto">
-      {isAdminPage || isCoursePage ?  (
-        <Link href="/dashboard">
-          <Button size="sm" variant="ghost">
-            <LogOut className="h-4 w-4 mr-2" />
-            Exit
-          </Button>
-        </Link>
-      ): isAdmin(userId) ? (
-        <Link href="/admin/courses">
-          <Button size="sm" variant="ghost">
-            Admin Mode
-          </Button>
-        </Link>
-      ) : null}
-      <UserButton afterSignOutUrl="/" />
-    </div>
     </>
   );
-}
- 
+};
+
 export default NavbarRoutes;

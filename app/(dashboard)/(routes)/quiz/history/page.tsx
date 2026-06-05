@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@/lib/auth";
 import { LucideLayoutDashboard } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";

@@ -1,7 +1,6 @@
 "use client";
 
 import { Chat, LoadingIndicator } from "stream-chat-react";
-import { useUser } from "@clerk/nextjs";
 import { useCallback, useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import toast from "react-hot-toast";
@@ -16,7 +15,11 @@ import ChatChannel from "./_comonents/chat-channel";
 
 const DiscussionsPage = () => {
   const chatClient = useInitializeChatClient();
-  const { user } = useUser();
+  const user = {
+    id: "demo_learner",
+    fullName: "Demo Learner",
+    imageUrl: "",
+  } as any;
   const [channelName, setChannelName] = useState("");
   const [SidebarOpen, setSidebarOpen] = useState(false);
   const [isChannelCreated, setIsChannelCreated] = useState(false);
