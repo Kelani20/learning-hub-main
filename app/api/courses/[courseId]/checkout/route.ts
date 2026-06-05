@@ -3,13 +3,17 @@ import { currentUser } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
-import { stripe } from "@/lib/stripe";
+import { env } from "@/lib/env";
 
 export async function POST(
   req: Request,
   { params }: { params: { courseId: string } }
 ) {
   try {
+    if (env.PAYMENT_PROVIDER !== "stripe") {
+      return new NextResponse("Stripe checkout is not enabled", { status: 400 });
+    }
+
     const user = await currentUser();
 
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
@@ -64,6 +68,7 @@ export async function POST(
     });
 
     if (!StripeCustomer) {
+      const { stripe } = await import("@/lib/stripe");
       const customer = await stripe.customers.create({
         email: user.emailAddresses[0].emailAddress,
       });
@@ -76,6 +81,7 @@ export async function POST(
       });
     }
 
+    const { stripe } = await import("@/lib/stripe");
     const session = await stripe.checkout.sessions.create({
       customer: StripeCustomer.stripeCustomerId,
       line_items,

@@ -9,10 +9,10 @@ import MuxPlayer from "@mux/mux-player-react";
 
 import { cn } from "@/lib/utils";
 import { useConfettiStore } from "@/hooks/use-confetti-store";
-import { on } from "events";
 
 interface VideoPlayerProps {
-  playbackId: string;
+  playbackId?: string | null;
+  videoUrl?: string | null;
   courseId: string;
   chapterId: string;
   nextChapterId?: string;
@@ -23,6 +23,7 @@ interface VideoPlayerProps {
 
 export const VideoPlayer = ({
   playbackId,
+  videoUrl,
   courseId,
   chapterId,
   nextChapterId,
@@ -70,7 +71,17 @@ export const VideoPlayer = ({
           <p className="text-sm">This Chapter is locked</p>
         </div>
       )}
-      {!isLocked && (
+      {!isLocked && videoUrl && (
+        <iframe
+          title={title}
+          src={videoUrl}
+          className={cn("h-full w-full rounded-md border-0", !isReady && "hidden")}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          onLoad={() => setIsReady(true)}
+        />
+      )}
+      {!isLocked && !videoUrl && playbackId && (
         <MuxPlayer
           title={title}
           className={cn(!isReady && "hidden")}
@@ -79,6 +90,11 @@ export const VideoPlayer = ({
           autoPlay
           playbackId={playbackId}
         />
+      )}
+      {!isLocked && !videoUrl && !playbackId && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-100 text-sm text-slate-600">
+          No video has been added for this lesson yet.
+        </div>
       )}
     </div>
   );

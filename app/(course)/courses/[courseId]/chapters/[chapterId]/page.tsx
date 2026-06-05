@@ -6,6 +6,7 @@ import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
+import { toEmbeddableVideoUrl } from "@/lib/video";
 
 import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
@@ -65,7 +66,8 @@ const ChapterIdPage = async ({
             title={chapter.title}
             courseId={params.courseId}
             nextChapterId={nextChapter?.id}
-            playbackId={muxData?.playbackId!}
+            playbackId={muxData?.playbackId}
+            videoUrl={toEmbeddableVideoUrl(chapter.videoUrl)}
             isLocked={isLocked}
             completeOnEnd={completeOnEnd}
           />

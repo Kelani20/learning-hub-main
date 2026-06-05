@@ -1,13 +1,8 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
-import Mux from "@mux/mux-node";
 
 import { db } from "@/lib/db";
-
-const { Video } = new Mux(
-  process.env.MUX_TOKEN_ID!,
-  process.env.MUX_TOKEN_SECRET!
-);
+import { createMuxAsset, deleteMuxAsset } from "@/lib/video";
 
 export async function PATCH(
   req: Request,
@@ -50,7 +45,7 @@ export async function PATCH(
       });
 
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
+        await deleteMuxAsset(existingMuxData.assetId);
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,
@@ -58,19 +53,17 @@ export async function PATCH(
         });
       }
 
-      const asset = await Video.Assets.create({
-        input: values.videoUrl,
-        playback_policy: "public",
-        test: false,
-      });
+      const asset = await createMuxAsset(values.videoUrl);
 
-      await db.muxData.create({
-        data: {
-          assetId: asset.id,
-          playbackId: asset.playback_ids?.[0]?.id,
-          chapterId: params.chapterId,
-        },
-      });
+      if (asset) {
+        await db.muxData.create({
+          data: {
+            assetId: asset.id,
+            playbackId: asset.playback_ids?.[0]?.id,
+            chapterId: params.chapterId,
+          },
+        });
+      }
     }
 
     return NextResponse.json(chapter);
@@ -121,7 +114,7 @@ export async function DELETE(
       });
 
       if (existingMuxData) {
-        await Video.Assets.del(existingMuxData.assetId);
+        await deleteMuxAsset(existingMuxData.assetId);
         await db.muxData.delete({
           where: {
             id: existingMuxData.id,

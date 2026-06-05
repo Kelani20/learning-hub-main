@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
@@ -16,15 +17,16 @@ export const CourseEnrollButton = ({
   price,
   courseId,
 }: CourseEnrollButtonProps) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = async () => {
     try {
       setIsLoading(true);
 
-      const response = await axios.post(`/api/courses/${courseId}/checkout`);
-
-      window.location.assign(response.data.url);
+      await axios.post(`/api/courses/${courseId}/enroll`);
+      toast.success("You are enrolled");
+      router.refresh();
     } catch {
       toast.error("Something went wrong");
     } finally {

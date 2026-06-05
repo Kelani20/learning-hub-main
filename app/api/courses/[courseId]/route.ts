@@ -1,13 +1,8 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server"
-import Mux from "@mux/mux-node";
 
 import { db } from "@/lib/db";
-
-const { Video } = new Mux(
-  process.env.MUX_TOKEN_ID!,
-  process.env.MUX_TOKEN_SECRET!,
-);
+import { deleteMuxAsset } from "@/lib/video";
 
 export const PATCH = async (
   req: Request,
@@ -70,7 +65,7 @@ export const DELETE = async (
 
     for (const chapter of course.chapters) {
       if (chapter.muxData?.assetId) {
-        await Video.Assets.del(chapter.muxData.assetId);
+        await deleteMuxAsset(chapter.muxData.assetId);
       }
     }
 
