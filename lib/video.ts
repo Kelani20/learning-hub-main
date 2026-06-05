@@ -24,24 +24,27 @@ async function getMuxVideo() {
   }
 
   const Mux = (await import("@mux/mux-node")).default;
-  const { Video } = new Mux(env.MUX_TOKEN_ID, env.MUX_TOKEN_SECRET);
-  return Video;
+  const mux = new Mux({
+    tokenId: env.MUX_TOKEN_ID,
+    tokenSecret: env.MUX_TOKEN_SECRET,
+  });
+  return mux.video;
 }
 
 export async function deleteMuxAsset(assetId: string) {
   const Video = await getMuxVideo();
   if (!Video) return;
 
-  await Video.Assets.del(assetId);
+  await Video.assets.delete(assetId);
 }
 
 export async function createMuxAsset(input: string) {
   const Video = await getMuxVideo();
   if (!Video) return null;
 
-  return Video.Assets.create({
-    input,
-    playback_policy: "public",
+  return Video.assets.create({
+    inputs: [{ url: input }],
+    playback_policies: ["public"],
     test: false,
   });
 }

@@ -31,7 +31,10 @@ const users: Record<"learner" | "instructor", AppUser> = {
 };
 
 function selectedDemoRole() {
-  const selected = cookies().get("learning-hub-demo-role")?.value;
+  const cookieStore = cookies() as unknown as {
+    get: (name: string) => { value: string } | undefined;
+  };
+  const selected = cookieStore.get("learning-hub-demo-role")?.value;
   return selected === "instructor" ? "instructor" : "learner";
 }
 

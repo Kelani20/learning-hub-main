@@ -1,101 +1,90 @@
-# Learning Hub: Next.js, React, Stripe, Mux, Prisma, Tailwind, MySQL, ChatEngine, OpenAI
+# Learning Hub
 
-![Landign Page for Learning Hub](https://git.cs.usask.ca/neg208/learning-hub/-/blob/main/public/landing.png?raw=true)
+Learning Hub is a portfolio-ready course platform rebuilt around a free, demo-first workflow. Reviewers can browse courses, enroll without payment, watch embedded lessons, complete quizzes, switch into instructor mode, and use database-backed discussions without needing paid API keys.
 
-This is a repository for Learning Hub Platform: Next.js, React, Stripe, Mux, Prisma, Tailwind, MySQL, ChatEngine, OpenAI
+## What Works
 
-Key Features:
+- Demo authentication with learner and instructor roles
+- Course catalog with category filters, search, progress, and enrollment
+- Instructor course builder with chapters, publishing, uploads, and ordering
+- URL-based lesson playback by default, with optional Mux support
+- Local quiz generation with saved attempts, topic counts, and history
+- Database-backed discussion threads and messages
+- PostgreSQL Prisma schema with deterministic seed data
+- Vitest coverage for formatting, enrollment, video URLs, quizzes, progress, and discussions
 
-- Browse & Filter Courses
-- Purchase Courses using Stripe
-- Mark Chapters as Completed or Uncompleted
-- Progress Calculation of each Course
-- Student Dashboard
-- Teacher mode
-- Create new Courses
-- Create new Chapters
-- Easily reorder chapter position with drag n’ drop
-- Upload thumbnails, attachments and videos using UploadThing
-- Video processing using Mux
-- HLS Video player using Mux
-- Rich text editor for chapter description
-- Authentication using Clerk
-- ORM using Prisma
-- MySQL database using Planetscale
-- Quizzes generated using OpenAIApi
-- Disscussion board using ChatEngine
+## Stack
 
-### Prerequisites
+- Next.js 15, React 18, TypeScript, Tailwind CSS
+- Prisma 5 with PostgreSQL
+- Vitest and Testing Library
+- UploadThing for optional uploads
+- Stripe and Mux are optional production integrations, disabled in demo mode
 
-**Node version 18.x.x**
+## Quick Start
 
-### Cloning the repository
-
-```shell
-git clone https://git.cs.usask.ca/neg208/learning-hub.git
-```
-
-### Install packages
-
-```shell
+```bash
 npm install --legacy-peer-deps
-```
-
-### Setup .env file
-
-
-```js
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
-CLERK_SECRET_KEY=
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=
-NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=
-NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=
-
-DATABASE_URL=
-
-UPLOADTHING_SECRET=
-UPLOADTHING_APP_ID=
-
-MUX_TOKEN_ID=
-MUX_TOKEN_SECRET=
-
-STRIPE_API_KEY=
-STRIPE_WEBHOOK_SECRET=
-
-API_URL='http://localhost:3000'
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-NEXT_PUBLIC_STREAM_KEY=
-STREAM_SECRET=
-OPENAI_API_KEY=
-
-STRIPE_API_KEY=
-STRIPE_WEBHOOK_SECRET=
-
-NEXT_PUBLIC_TEACHER_ID=
-```
-
-### Setup Prisma
-
-Add MySQL Database (I used PlanetScale)
-
-```shell
-npx prisma generate
-npx prisma db push
-
-```
-
-### Start the app
-
-```shell
+cp .env.example .env
+docker compose up -d
+npm run db:generate
+npm run db:push
+npm run db:seed
 npm run dev
 ```
 
-## Available commands
+Open `http://localhost:3000`.
 
-Running commands with npm `npm run [command]`
+## Demo Mode
 
-| command         | description                              |
-| :-------------- | :--------------------------------------- |
-| `dev`           | Starts a development instance of the app |
+The default `.env.example` is configured for a fully local showcase:
+
+```env
+NEXT_PUBLIC_DEMO_MODE="true"
+AUTH_PROVIDER="demo"
+VIDEO_PROVIDER="url"
+PAYMENT_PROVIDER="demo"
+QUIZ_PROVIDER="local"
+DISCUSSION_PROVIDER="database"
+```
+
+Use the role switcher in the navbar to move between:
+
+- `Demo Learner`: browse, enroll, watch, complete chapters, quiz, discuss
+- `Demo Instructor`: create and manage courses from `/admin/courses`
+
+## Useful Scripts
+
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm run verify
+npm audit --audit-level=high
+```
+
+`npm audit --audit-level=high` is the security gate for this demo. The dependency tree has no high or critical advisories after modernization; npm may still report a moderate nested PostCSS advisory inside the current Next package line.
+
+## Production Notes
+
+The app is designed to be usable as-is for a portfolio demo and easy to harden further:
+
+- Keep demo auth for public portfolio deployments, or replace `lib/auth.ts` with a real provider.
+- Keep `PAYMENT_PROVIDER=demo` for frictionless review, or enable Stripe with `STRIPE_API_KEY` and `STRIPE_WEBHOOK_SECRET`.
+- Keep `VIDEO_PROVIDER=url` for free embedded video, or enable Mux with `MUX_TOKEN_ID` and `MUX_TOKEN_SECRET`.
+- Seed data is deterministic, so demos can be reset with `npm run db:seed`.
+
+## Health Check
+
+Before sharing the project, run:
+
+```bash
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+npm audit --audit-level=high
+```
+
+These checks cover code quality, TypeScript safety, core behavior tests, production build viability, and high-severity dependency posture.

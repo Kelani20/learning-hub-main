@@ -1,7 +1,9 @@
+@import "~@uploadthing/react/styles.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "~stream-chat-react/dist/css/v2/index.css";
+
 html,
 body,
 :root {
@@ -79,13 +81,4 @@ body,
   body {
     @apply bg-background text-foreground;
   }
-}
-
-@import "~@uploadthing/react/styles.css";
-.str-chat * {
-  font-family: inherit !important;
-}
-
-.str-chat__channel-search.str-chat__channel-search--with-results.str-chat__channel-search--inline{
-  height: fit-content;
 }

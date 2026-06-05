@@ -1,7 +1,6 @@
 import React from "react";
 import { db } from "@/lib/db";
 
-
 import {
   Card,
   CardContent,
@@ -21,16 +20,16 @@ const HotTopicsCard = async () => {
   });
   
   return (
-    <Card className="col-span-4">
-      <CardHeader>
-        <CardTitle className="text-2xl">
+    <Card className="col-span-4 overflow-hidden border-slate-200 shadow-sm">
+      <CardHeader className="border-b border-slate-100 bg-white">
+        <CardTitle className="text-2xl tracking-normal">
           Hot Topics
         </CardTitle>
-        <CardDescription className="text-sm text-slate-600 text-muted-foreground">
+        <CardDescription className="text-sm text-slate-600">
           See what topics are trending in the community.
         </CardDescription>
       </CardHeader>
-      <CardContent className="pl-2">
+      <CardContent className="p-4">
         <WordCloud formattedTopics={formattedTopics} />
       </CardContent>
     </Card>

@@ -12,14 +12,13 @@ import TimeTakenCard from "../_components/time-taken-card";
 import QuestionsList from "../_components/questions-list";
 
 const Statistics = async ({ 
-  params: { 
-    gameId 
-  } 
+  params
 }: {
-  params: {
+  params: Promise<{
     gameId: string;
-  };
+  }>;
 }) => {
+  const { gameId } = await params;
   const { userId } = auth();
 
   if (!userId) {

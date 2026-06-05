@@ -6,11 +6,11 @@ import { deleteMuxAsset } from "@/lib/video";
 
 export const PATCH = async (
   req: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
   ) => {
   try {
     const { userId } = auth();
-    const { courseId } = params;
+    const { courseId } = await params;
     const values = await req.json();
 
     if (!userId) {
@@ -36,9 +36,10 @@ export const PATCH = async (
 
 export const DELETE = async (
   req: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
   ) => {
   try {
+    const { courseId } = await params;
     const { userId } = auth();
 
     if (!userId) {
@@ -47,7 +48,7 @@ export const DELETE = async (
 
     const course = await db.course.findUnique({
       where: {
-         id: params.courseId,
+         id: courseId,
          userId,
         },
       include: {
@@ -71,7 +72,7 @@ export const DELETE = async (
 
     const deletedCourse = await db.course.delete({
       where: {
-        id: params.courseId,
+        id: courseId,
       }
     });
 

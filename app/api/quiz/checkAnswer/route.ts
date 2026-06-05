@@ -10,7 +10,7 @@ const checkAnswerSchema = z.object({
   questionId: z.string(),
 });
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { userId } = auth();
@@ -71,6 +71,8 @@ export async function POST(req: Request, res: Response) {
 
       return NextResponse.json({ percentageSimilar });
     }
+
+    return NextResponse.json({ message: "Unsupported question type" }, { status: 400 });
   } catch (error) {
     return new NextResponse(error as string, { status: 500 });
   }

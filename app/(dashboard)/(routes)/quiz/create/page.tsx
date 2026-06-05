@@ -4,19 +4,20 @@ import { redirect } from "next/navigation";
 
 import QuizCreation from "./_components/quiz-creation";
 
-const Quiz = ({ 
+const Quiz = async ({
   searchParams 
 }: {
-  searchParams: {
+  searchParams: Promise<{
     topic?: string;
-  };
+  }>;
 }) => {
+  const { topic = "" } = await searchParams;
   const { userId } = auth();
   
   if (!userId) {
     redirect("/sign-in");
   }
-  return <QuizCreation topic={searchParams.topic ?? ""} />;
+  return <QuizCreation topic={topic} />;
 };
 
 export default Quiz;

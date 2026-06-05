@@ -10,19 +10,21 @@ const HistoryCard = () => {
   const router = useRouter();
   return (
     <Card
-      className="hover:cursor-pointer hover:opacity-75"
+      className="border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:cursor-pointer hover:border-amber-300 hover:shadow-lg"
       onClick={() => {
         router.push("/quiz/history");
       }}
     >
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <CardTitle className="text-2xl">
+        <CardTitle className="text-2xl font-black tracking-normal text-slate-950">
           History
         </CardTitle>
-        <History size={28} strokeWidth={2.5} />
+        <div className="flex h-11 w-11 items-center justify-center rounded-md bg-amber-50 text-amber-700">
+          <History size={24} strokeWidth={2.5} />
+        </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-slate-600 text-muted-foreground">
+        <p className="text-sm leading-6 text-slate-600">
           View past quiz attempts.
         </p>
       </CardContent>

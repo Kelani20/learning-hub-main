@@ -5,13 +5,14 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import OpenEnded from "../../_components/open-ended";
 
-const OpenEndedPage = async ({ 
-  params: { gameId } 
+const OpenEndedPage = async ({
+  params
 }: {
-  params: {
+  params: Promise<{
     gameId: string;
-  };
+  }>;
 }) => {
+  const { gameId } = await params;
   const { userId } = auth();
 
   if (!userId) {

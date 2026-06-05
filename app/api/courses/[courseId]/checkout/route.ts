@@ -7,9 +7,10 @@ import { env } from "@/lib/env";
 
 export async function POST(
   req: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
+    const { courseId } = await params;
     if (env.PAYMENT_PROVIDER !== "stripe") {
       return new NextResponse("Stripe checkout is not enabled", { status: 400 });
     }
@@ -22,7 +23,7 @@ export async function POST(
 
     const course = await db.course.findUnique({
       where: {
-        id: params.courseId,
+        id: courseId,
         isPublished: true,
       }
     });
@@ -31,7 +32,7 @@ export async function POST(
       where: {
         userId_courseId: {
           userId: user.id,
-          courseId: params.courseId
+          courseId
         }
       }
     });

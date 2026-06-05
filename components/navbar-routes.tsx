@@ -3,6 +3,7 @@
 import { LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { DemoUserButton } from "@/components/auth/demo-user-button";
 import { Button } from "@/components/ui/button";
@@ -18,7 +19,9 @@ const NavbarRoutes = () => {
     <>
       {isBrowsePage && (
         <div className="hidden md:block">
-          <SearchInput />
+          <Suspense fallback={<div className="ml-8 h-10 w-[320px] rounded-full bg-slate-100" />}>
+            <SearchInput />
+          </Suspense>
         </div>
       )}
       <div className="ml-auto flex items-center gap-2">

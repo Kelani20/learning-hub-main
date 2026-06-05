@@ -2,12 +2,14 @@ import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
   try {
+    const { courseId, chapterId } = await params;
     const { userId } = auth();
 
     if (!userId) {
@@ -16,7 +18,7 @@ export async function PATCH(
 
     const courseOwner = await db.course.findUnique({
       where: {
-        id: params.courseId,
+        id: courseId,
         userId: userId,
       },
     });
@@ -27,25 +29,29 @@ export async function PATCH(
 
     const chapter = await db.chapter.findUnique({
       where: {
-        id: params.chapterId,
-        courseId: params.courseId,
+        id: chapterId,
+        courseId,
       },
     });
 
     const muxData = await db.muxData.findUnique({
       where: {
-        chapterId: params.chapterId,
+        chapterId,
       },
     });
     
-    if (!chapter || !muxData || !chapter.title || !chapter.description || !chapter.videoUrl) {
+    if (!chapter || !chapter.title || !chapter.description || !chapter.videoUrl) {
+      return new NextResponse("Missing required fields", { status: 400 });
+    }
+
+    if (env.VIDEO_PROVIDER === "mux" && !muxData) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
 
     const publishedChapter = await db.chapter.update({
       where: {
-        id: params.chapterId,
-        courseId: params.courseId,
+        id: chapterId,
+        courseId,
       },
       data: {
         isPublished: true,

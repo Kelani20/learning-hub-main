@@ -10,8 +10,9 @@ const messageSchema = z.object({
 
 export async function POST(
   req: Request,
-  { params }: { params: { threadId: string } }
+  { params }: { params: Promise<{ threadId: string }> }
 ) {
+  const { threadId } = await params;
   const { userId } = auth();
 
   if (!userId) {
@@ -19,7 +20,7 @@ export async function POST(
   }
 
   const { body } = messageSchema.parse(await req.json());
-  const message = await addDiscussionMessage(userId, params.threadId, body);
+  const message = await addDiscussionMessage(userId, threadId, body);
 
   return NextResponse.json(message);
 }

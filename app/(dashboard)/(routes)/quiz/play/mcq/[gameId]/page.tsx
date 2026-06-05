@@ -6,12 +6,13 @@ import { db } from "@/lib/db";
 import MCQ from "../../_components/mcq";
 
 type Props = {
-  params: {
+  params: Promise<{
     gameId: string;
-  };
+  }>;
 };
 
-const MCQPage = async ({ params: { gameId } }: Props) => {
+const MCQPage = async ({ params }: Props) => {
+  const { gameId } = await params;
   const { userId } = auth();
 
   if (!userId) {

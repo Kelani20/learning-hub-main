@@ -5,8 +5,9 @@ import { db } from "@/lib/db";
 
 export async function DELETE(
   req: Request,
-  { params }: {params: {courseId: string, attachmentId: string}}) {
+  { params }: { params: Promise<{ courseId: string; attachmentId: string }> }) {
   try {
+    const { courseId, attachmentId } = await params;
     const { userId } = auth();
     
     if (!userId) {
@@ -15,7 +16,7 @@ export async function DELETE(
 
     const courseOwner = await db.course.findUnique({
       where: {
-        id: params.courseId,
+        id: courseId,
         userId: userId,
       },
     });
@@ -26,8 +27,8 @@ export async function DELETE(
 
     const attachment = await db.attachment.delete({
       where: {
-        id: params.attachmentId,
-        courseId: params.courseId,
+        id: attachmentId,
+        courseId,
       },
     });
 

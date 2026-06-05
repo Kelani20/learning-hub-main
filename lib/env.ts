@@ -19,20 +19,15 @@ const envSchema = z.object({
   NEXT_PUBLIC_DEMO_MODE: booleanFromString,
   DEMO_USER_ID: z.string().default("demo_learner"),
   DEMO_ADMIN_ID: z.string().default("demo_instructor"),
-  AUTH_PROVIDER: z.enum(["demo", "clerk"]).default("demo"),
+  AUTH_PROVIDER: z.literal("demo").default("demo"),
   VIDEO_PROVIDER: z.enum(["url", "mux"]).default("url"),
   PAYMENT_PROVIDER: z.enum(["demo", "stripe"]).default("demo"),
-  QUIZ_PROVIDER: z.enum(["local", "openai"]).default("local"),
-  DISCUSSION_PROVIDER: z.enum(["database"]).default("database"),
-  CLERK_SECRET_KEY: optionalString,
-  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: optionalString,
+  QUIZ_PROVIDER: z.literal("local").default("local"),
+  DISCUSSION_PROVIDER: z.literal("database").default("database"),
   STRIPE_API_KEY: optionalString,
   STRIPE_WEBHOOK_SECRET: optionalString,
   MUX_TOKEN_ID: optionalString,
   MUX_TOKEN_SECRET: optionalString,
-  OPENAI_API_KEY: optionalString,
-  NEXT_PUBLIC_STREAM_KEY: z.string().default("demo_stream_key"),
-  STREAM_SECRET: z.string().default("demo_stream_secret"),
 });
 
 export const env = envSchema.parse(process.env);

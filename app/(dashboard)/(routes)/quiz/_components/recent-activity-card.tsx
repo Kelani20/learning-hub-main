@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
@@ -13,9 +12,7 @@ import {
 import { db } from "@/lib/db";
 import History from "./history";
 
-type Props = {};
-
-const RecentActivityCard = async (props: Props) => {
+const RecentActivityCard = async () => {
   const { userId } = auth();
   if (!userId) {
     return redirect("/sign-in");
@@ -27,16 +24,16 @@ const RecentActivityCard = async (props: Props) => {
   });
 
   return (
-    <Card className="col-span-4 lg:col-span-3">
+    <Card className="col-span-4 border-slate-200 bg-white shadow-sm lg:col-span-3">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold">
+        <CardTitle className="text-2xl font-black tracking-normal text-slate-950">
           <Link href="/quiz/history">Recent Activity</Link>
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-slate-600">
           You have played a total of {games_count} quizzes.
         </CardDescription>
       </CardHeader>
-      <CardContent className="max-h-[580px] overflow-scroll">
+      <CardContent className="max-h-[580px] overflow-auto">
         <History limit={10} userId={userId} />
       </CardContent>
     </Card>

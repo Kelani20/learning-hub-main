@@ -5,13 +5,14 @@ import { db } from "@/lib/db";
 const CourseIdPage = async ({
   params 
 }: {
-  params: {
+  params: Promise<{
     courseId: string 
-  } 
+  }>
 }) => {
+  const { courseId } = await params;
   const course = await db.course.findUnique({
     where: {
-      id: params.courseId,
+      id: courseId,
     },
     include: {
       chapters: {

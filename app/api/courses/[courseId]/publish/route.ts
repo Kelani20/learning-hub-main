@@ -5,9 +5,10 @@ import { db } from "@/lib/db";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
+    const { courseId } = await params;
     const { userId } = auth();
 
     if (!userId) {
@@ -16,7 +17,7 @@ export async function PATCH(
 
     const course = await db.course.findUnique({
       where: {
-        id: params.courseId,
+        id: courseId,
         userId,
       },
       include: {
@@ -40,7 +41,7 @@ export async function PATCH(
 
     const publishedCourse = await db.course.update({
       where: {
-        id: params.courseId,
+        id: courseId,
         userId,
       },
       data: {

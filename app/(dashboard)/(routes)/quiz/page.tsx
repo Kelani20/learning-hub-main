@@ -14,13 +14,25 @@ const QuizPage = () => {
   }
   
   return (
-    <div className="h-full">
-      <main className="p-8 mx-auto max-w-7xl">
-        <div className="grid gap-4 mt-4 md:grid-cols-2">
+    <div className="min-h-full bg-slate-50">
+      <main className="mx-auto max-w-7xl p-4 sm:p-6">
+        <div className="mb-6 rounded-md border border-slate-200 bg-white p-6 shadow-sm">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
+            Practice lab
+          </p>
+          <h1 className="mt-2 text-3xl font-black tracking-normal text-slate-950">
+            Quiz yourself with local generated prompts.
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+            The demo quiz engine works without paid AI keys, saves attempts, and keeps
+            topic activity visible.
+          </p>
+        </div>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
           <QuizMeCard />
           <HistoryCard />
         </div>
-        <div className="grid gap-4 mt-4 md:grid-cols-2 lg:grid-cols-7">
+        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <HotTopicsCard />
           <RecentActivityCard />
         </div>
