@@ -1,19 +1,35 @@
 import { auth } from "@/lib/auth";
 
 import { db } from "@/lib/db";
+import { isDemoCourseId } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 import { NextResponse } from "next/server";
 
 export async function PUT(
   req: Request,
   { params }: { params: Promise<{ courseId: string; chapterId: string }> }
 ) {
+  const { courseId, chapterId } = await params;
+  let isCompleted = false;
+
   try {
-    const { courseId, chapterId } = await params;
     const { userId } = auth();
-    const { isCompleted } = await req.json();
+    const body = await req.json();
+    isCompleted = !!body.isCompleted;
 
     if (!userId) {
       return new Response("Unauthorized", { status: 401 });
+    }
+
+    if (isDemoMode && !hasDatabaseUrl && isDemoCourseId(courseId)) {
+      return NextResponse.json({
+        id: `progress_${userId}_${courseId}_${chapterId}`,
+        userId,
+        chapterId,
+        isCompleted,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
     }
 
     const chapter = await db.chapter.findFirst({
@@ -61,6 +77,19 @@ export async function PUT(
     return NextResponse.json(userProgress);
   } catch (error) {
     console.log("[CHAPTER_ID_PROGRESS]", error);
+    if (isDemoMode && isDemoCourseId(courseId)) {
+      const { userId } = auth();
+
+      return NextResponse.json({
+        id: `progress_${userId}_${courseId}_${chapterId}`,
+        userId,
+        chapterId,
+        isCompleted,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    }
+
     return new NextResponse("Internal Error", { status: 500 })
   }
 }

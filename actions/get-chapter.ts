@@ -1,6 +1,15 @@
 import { Attachment, Chapter } from "@prisma/client";
 
 import { db } from "@/lib/db";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
+import {
+  demoAttachments,
+  getDemoChapter,
+  getDemoChapters,
+  getDemoCourse,
+  getDemoProgressRows,
+  makeDemoPurchase,
+} from "@/lib/demo-data";
 
 interface GetChapterProps {
   userId: string;
@@ -8,11 +17,52 @@ interface GetChapterProps {
   chapterId: string;
 };
 
+const getDemoChapterPayload = ({
+  userId,
+  courseId,
+  chapterId,
+}: GetChapterProps) => {
+  const course = getDemoCourse(courseId);
+  const chapter = getDemoChapter(chapterId);
+
+  if (!course || !chapter || chapter.courseId !== courseId) {
+    return null;
+  }
+
+  const chapters = getDemoChapters(courseId);
+  const nextChapter =
+    chapters.find((candidate) => candidate.position > chapter.position) ?? null;
+  const userProgress =
+    getDemoProgressRows(userId, courseId).find(
+      (progress) => progress.chapterId === chapterId
+    ) ?? null;
+
+  return {
+    chapter,
+    course,
+    muxData: null,
+    attachments: demoAttachments.filter(
+      (attachment) => attachment.courseId === courseId
+    ),
+    nextChapter,
+    userProgress,
+    purchase: makeDemoPurchase(userId, courseId),
+  };
+};
+
 export const getChapter = async ({
   userId,
   courseId,
   chapterId,
 }: GetChapterProps) => {
+  if (isDemoMode && !hasDatabaseUrl) {
+    const demoPayload = getDemoChapterPayload({ userId, courseId, chapterId });
+
+    if (demoPayload) {
+      return demoPayload;
+    }
+  }
+
   try {
     const purchase = await db.purchase.findUnique({
       where: {
@@ -97,6 +147,14 @@ export const getChapter = async ({
     };
   } catch (error) {
     console.log("[GET_CHAPTER]", error);
+    if (isDemoMode) {
+      const demoPayload = getDemoChapterPayload({ userId, courseId, chapterId });
+
+      if (demoPayload) {
+        return demoPayload;
+      }
+    }
+
     return {
       chapter: null,
       course: null,

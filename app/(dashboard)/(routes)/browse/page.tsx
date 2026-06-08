@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { SearchInput } from "@/components/search-input";
 import { getCourses } from "@/actions/get-courses";
 import { CoursesList } from "@/components/courses-list";
+import { demoCategories } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 
 import { Categories } from "./_components/categories";
 
@@ -25,11 +27,22 @@ const BrowsePage = async ({
     return redirect("/sign-in");
   }
 
-  const categories = await db.category.findMany({
-    orderBy: {
-      name: "asc"
-    }
-  });
+  const categories =
+    isDemoMode && !hasDatabaseUrl
+      ? demoCategories
+      : await db.category
+          .findMany({
+            orderBy: {
+              name: "asc"
+            }
+          })
+          .catch((error) => {
+            console.log("[BROWSE_CATEGORIES]", error);
+            return isDemoMode ? demoCategories : [];
+          });
+
+  const categoryItems =
+    categories.length === 0 && isDemoMode ? demoCategories : categories;
 
   const resolvedSearchParams = await searchParams;
 
@@ -56,7 +69,7 @@ const BrowsePage = async ({
         </div>
         <Suspense fallback={<div className="h-10 rounded-full bg-slate-100" />}>
           <Categories
-            items={categories}
+            items={categoryItems}
           />
         </Suspense>
         <CoursesList items={courses} />

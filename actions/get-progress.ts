@@ -1,9 +1,15 @@
 import { db } from "@/lib/db";
+import { getDemoProgress, isDemoCourseId } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 
 export const getProgress = async (
   userId: string,
   courseId: string
 ): Promise<number> => {
+  if (isDemoMode && !hasDatabaseUrl && isDemoCourseId(courseId)) {
+    return getDemoProgress(courseId) ?? 0;
+  }
+
   try {
     const publishedChapters = await db.chapter.findMany({
       where: {

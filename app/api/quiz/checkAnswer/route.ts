@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import stringSimilarity from "string-similarity";
 
 import { db } from "@/lib/db";
+import { getDemoGameWithQuestions } from "@/lib/demo-data";
+import { isDemoMode } from "@/lib/env";
 import { auth } from "@/lib/auth";
 
 const checkAnswerSchema = z.object({
@@ -20,6 +22,36 @@ export async function POST(req: Request) {
     }
 
     const { questionId, userInput } = checkAnswerSchema.parse(body);
+
+    if (isDemoMode && questionId.startsWith("demo-question-")) {
+      const gameId = questionId.replace(/^demo-question-\d+-/, "");
+      const demoGame = getDemoGameWithQuestions(gameId, userId);
+      const question = demoGame?.questions.find(
+        (candidate) => candidate.id === questionId
+      );
+
+      if (!question) {
+        return NextResponse.json({ message: "Question not found" }, { status: 404 });
+      }
+
+      if (question.questionType === "mcq") {
+        return NextResponse.json({
+          isCorrect:
+            question.answer.toLowerCase().trim() ===
+            userInput.toLowerCase().trim(),
+        });
+      }
+
+      const percentageSimilar = Math.round(
+        stringSimilarity.compareTwoStrings(
+          question.answer.toLowerCase().trim(),
+          userInput.toLowerCase().trim()
+        ) * 100
+      );
+
+      return NextResponse.json({ percentageSimilar });
+    }
+
     const question = await db.question.findFirst({
       where: {
         id: questionId,

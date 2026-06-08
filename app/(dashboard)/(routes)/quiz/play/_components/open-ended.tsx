@@ -31,6 +31,22 @@ const endGameSchema = z.object({
   gameId: z.string(),
 });
 
+function localSimilarityPercentage(expected: string, actual: string) {
+  const normalizedExpected = expected.toLowerCase().trim();
+  const normalizedActual = actual.toLowerCase().trim();
+
+  if (!normalizedActual) return 0;
+  if (normalizedExpected === normalizedActual) return 100;
+
+  const expectedTokens = new Set(normalizedExpected.split(/\s+/));
+  const actualTokens = new Set(normalizedActual.split(/\s+/));
+  const overlap = Array.from(expectedTokens).filter((token) =>
+    actualTokens.has(token)
+  );
+
+  return Math.round((overlap.length / Math.max(expectedTokens.size, 1)) * 100);
+}
+
 const OpenEnded = ({ 
   game 
 }: {
@@ -47,6 +63,10 @@ const OpenEnded = ({
 
   const { mutate: endGame } = useMutation({
     mutationFn: async () => {
+      if (game.id.startsWith("demo-")) {
+        return "Game ended";
+      }
+
       const payload: z.infer<typeof endGameSchema> = {
         gameId: game.id,
       };
@@ -64,6 +84,16 @@ const OpenEnded = ({
         filledAnswer = input.value;
         (input as HTMLInputElement).value = "";
       });
+
+      if (game.id.startsWith("demo-")) {
+        return {
+          percentageSimilar: localSimilarityPercentage(
+            currentQuestion.answer,
+            filledAnswer
+          ),
+        };
+      }
+
       const payload: z.infer<typeof checkAnswerSchema> = {
         questionId: currentQuestion.id,
         userInput: filledAnswer,

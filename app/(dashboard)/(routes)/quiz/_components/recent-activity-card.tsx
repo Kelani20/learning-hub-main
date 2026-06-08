@@ -10,6 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { db } from "@/lib/db";
+import { getDemoGames } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 import History from "./history";
 
 const RecentActivityCard = async () => {
@@ -17,11 +19,17 @@ const RecentActivityCard = async () => {
   if (!userId) {
     return redirect("/sign-in");
   }
-  const games_count = await db.game.count({
-    where: {
-      userId,
-    },
-  });
+  const games_count =
+    isDemoMode && !hasDatabaseUrl
+      ? getDemoGames(userId).length
+      : await db.game.count({
+          where: {
+            userId,
+          },
+        }).catch((error) => {
+          console.log("[RECENT_ACTIVITY_CARD]", error);
+          return isDemoMode ? getDemoGames(userId).length : 0;
+        });
 
   return (
     <Card className="col-span-4 border-slate-200 bg-white shadow-sm lg:col-span-3">

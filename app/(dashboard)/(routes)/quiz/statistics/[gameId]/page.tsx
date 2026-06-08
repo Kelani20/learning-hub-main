@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { LucideLayoutDashboard } from "lucide-react";
 
 import { db } from "@/lib/db";
+import { getDemoGameWithQuestions } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 import { buttonVariants } from "@/components/ui/button";
 import ResultsCard from "../_components/result-card";
 import AccuracyCard from "../_components/accuracy-card";
@@ -24,35 +26,44 @@ const Statistics = async ({
   if (!userId) {
     return redirect("/sign-in");
   }
-  const game = await db.game.findFirst({
-    where: { 
-      id: gameId,
-      userId,
-    },
-    include: { 
-      questions: true 
-    },
-  });
+  const game =
+    isDemoMode && !hasDatabaseUrl
+      ? null
+      : await db.game.findFirst({
+          where: {
+            id: gameId,
+            userId,
+          },
+          include: {
+            questions: true,
+          },
+        }).catch((error) => {
+          console.log("[QUIZ_STATISTICS]", error);
+          return null;
+        });
 
-  if (!game) {
+  const summaryGame =
+    game ?? (isDemoMode ? getDemoGameWithQuestions(gameId, userId, true) : null);
+
+  if (!summaryGame) {
     return redirect("/quiz");
   }
 
   let accuracy: number = 0;
 
-  if (game.gameType === "mcq") {
-    let totalCorrect = game.questions.reduce((acc, question) => {
+  if (summaryGame.gameType === "mcq") {
+    let totalCorrect = summaryGame.questions.reduce((acc, question) => {
       if (question.isCorrect) {
         return acc + 1;
       }
       return acc;
     }, 0);
-    accuracy = (totalCorrect / game.questions.length) * 100;
-  } else if (game.gameType === "open_ended") {
-    let totalPercentage = game.questions.reduce((acc, question) => {
+    accuracy = (totalCorrect / summaryGame.questions.length) * 100;
+  } else if (summaryGame.gameType === "open_ended") {
+    let totalPercentage = summaryGame.questions.reduce((acc, question) => {
       return acc + (question.percentageCorrect ?? 0);
     }, 0);
-    accuracy = totalPercentage / game.questions.length;
+    accuracy = totalPercentage / summaryGame.questions.length;
   }
   accuracy = Math.round(accuracy * 100) / 100;
 
@@ -73,11 +84,11 @@ const Statistics = async ({
           <ResultsCard accuracy={accuracy} />
           <AccuracyCard accuracy={accuracy} />
           <TimeTakenCard
-            timeEnded={new Date(game.timeEnded ?? 0)}
-            timeStarted={new Date(game.timeStarted ?? 0)}
+            timeEnded={new Date(summaryGame.timeEnded ?? 0)}
+            timeStarted={new Date(summaryGame.timeStarted ?? 0)}
           />
         </div>
-        <QuestionsList questions={game.questions} />
+        <QuestionsList questions={summaryGame.questions} />
       </div>
     </>
   );

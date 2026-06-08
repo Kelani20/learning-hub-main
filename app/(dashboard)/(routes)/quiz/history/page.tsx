@@ -8,9 +8,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import HistoryComponent from "./_components/history";
 
-type Props = {};
-
-const History = async (props: Props) => {
+const History = async () => {
   const { userId } = auth();
 
   if (!userId) {
@@ -18,23 +16,33 @@ const History = async (props: Props) => {
   }
 
   return (
-    <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 w-[400px]">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl font-bold">
-              History
-            </CardTitle>
-            <Link className={buttonVariants()} href="/quiz">
-              <LucideLayoutDashboard className="mr-2" />
-              Back to Dashboard
-            </Link>
+    <div className="min-h-full bg-slate-50 p-4 sm:p-6">
+      <div className="mx-auto max-w-5xl space-y-5">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
+              Practice lab
+            </p>
+            <h1 className="mt-2 text-3xl font-black tracking-normal text-slate-950">
+              Quiz history
+            </h1>
           </div>
-        </CardHeader>
-        <CardContent className="max-h-[60vh] overflow-scroll">
-          <HistoryComponent limit={100} userId={userId} />
-        </CardContent>
-      </Card>
+          <Link className={buttonVariants({ variant: "outline" })} href="/quiz">
+            <LucideLayoutDashboard className="mr-2 h-4 w-4" />
+            Back to Dashboard
+          </Link>
+        </div>
+        <Card className="border-slate-200 bg-white shadow-sm">
+          <CardHeader className="border-b border-slate-100">
+            <CardTitle className="text-2xl font-black tracking-normal text-slate-950">
+              Recent attempts
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="max-h-[70vh] overflow-auto p-6">
+            <HistoryComponent limit={100} userId={userId} />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

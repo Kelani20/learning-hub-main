@@ -29,10 +29,13 @@ const endGameSchema = z.object({
   gameId: z.string(),
 });
 
+type MCQQuestion = Pick<Question, "id" | "options" | "question"> &
+  Partial<Pick<Question, "answer">>;
+
 const MCQ = ({
   game,
 }: {
-  game: Game & { questions: Pick<Question, "id" | "options" | "question">[] };
+  game: Game & { questions: MCQQuestion[] };
 }) => {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [hasEnded, setHasEnded] = useState(false);
@@ -50,11 +53,36 @@ const MCQ = ({
   const options = useMemo(() => {
     if (!currentQuestion) return [];
     if (!currentQuestion.options) return [];
-    return JSON.parse(currentQuestion.options as string) as string[];
+    if (Array.isArray(currentQuestion.options)) {
+      return currentQuestion.options as string[];
+    }
+
+    if (typeof currentQuestion.options === "string") {
+      try {
+        return JSON.parse(currentQuestion.options) as string[];
+      } catch {
+        return [currentQuestion.options];
+      }
+    }
+
+    return [];
   }, [currentQuestion]);
 
   const { mutate: checkAnswer, isPending: isChecking } = useMutation({
     mutationFn: async () => {
+      if (!currentQuestion) {
+        throw new Error("No active question");
+      }
+
+      if (game.id.startsWith("demo-")) {
+        const userInput = options[selectedChoice] ?? "";
+        const isCorrect =
+          currentQuestion.answer?.toLowerCase().trim() ===
+          userInput.toLowerCase().trim();
+
+        return { isCorrect };
+      }
+
       const payload: z.infer<typeof checkAnswerSchema> = {
         questionId: currentQuestion.id,
         userInput: options[selectedChoice],
@@ -66,6 +94,10 @@ const MCQ = ({
 
   const { mutate: endGame } = useMutation({
     mutationFn: async () => {
+      if (game.id.startsWith("demo-")) {
+        return "Game ended";
+      }
+
       const payload: z.infer<typeof endGameSchema> = {
         gameId: game.id,
       };

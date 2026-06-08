@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import {
   Card,
   CardContent,
@@ -104,15 +103,19 @@ const QuizCreation = ({ topic: topicParam }: { topic: string }) => {
   }
 
   return (
-    <div className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">Quiz Creation</CardTitle>
-          <CardDescription>Choose a topic</CardDescription>
+    <div className="flex min-h-full items-center justify-center bg-slate-50 p-4 sm:p-6">
+      <Card className="w-full max-w-2xl border-slate-200 bg-white shadow-sm">
+        <CardHeader className="border-b border-slate-100">
+          <CardTitle className="text-2xl font-black tracking-normal text-slate-950">
+            Create a practice quiz
+          </CardTitle>
+          <CardDescription className="text-slate-600">
+            Choose a topic, question count, and format.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pt-6">
               <FormField
                 control={form.control}
                 name="topic"
@@ -123,8 +126,8 @@ const QuizCreation = ({ topic: topicParam }: { topic: string }) => {
                       <Input placeholder="Enter a topic" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Please provide any topic you would like to be quizzed on
-                      here.
+                      Pick a concrete subject like AI workflows, product metrics,
+                      or frontend systems.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -142,55 +145,61 @@ const QuizCreation = ({ topic: topicParam }: { topic: string }) => {
                         type="number"
                         {...field}
                         onChange={(e) => {
-                          form.setValue("amount", parseInt(e.target.value));
+                          form.setValue("amount", Number.parseInt(e.target.value) || 1, {
+                            shouldValidate: true,
+                          });
                         }}
                         min={1}
                         max={10}
                       />
                     </FormControl>
                     <FormDescription>
-                      You can choose how many questions you would like to be
-                      quizzed on here.
+                      Demo mode supports up to 10 generated local questions.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <div className="flex justify-between">
+              <div className="grid grid-cols-2 rounded-md border border-slate-200 bg-slate-50 p-1">
                 <Button
                   variant={
                     form.getValues("type") === "mcq" ? "default" : "secondary"
                   }
-                  className="w-1/2 rounded-none rounded-l-lg"
+                  className="rounded-sm"
                   onClick={() => {
-                    form.setValue("type", "mcq");
+                    form.setValue("type", "mcq", { shouldValidate: true });
                   }}
                   type="button"
                 >
                   <CopyCheck className="w-4 h-4 mr-2" /> Multiple Choice
                 </Button>
-                <Separator orientation="vertical" />
                 <Button
                   variant={
                     form.getValues("type") === "open_ended"
                       ? "default"
                       : "secondary"
                   }
-                  className="w-1/2 rounded-none rounded-r-lg"
-                  onClick={() => form.setValue("type", "open_ended")}
+                  className="rounded-sm"
+                  onClick={() =>
+                    form.setValue("type", "open_ended", { shouldValidate: true })
+                  }
                   type="button"
                 >
                   <BookOpen className="w-4 h-4 mr-2" /> Open Ended
                 </Button>
               </div>
-              <div className="flex items-center gap-x-2">
+              <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end">
                 <Link href="/quiz">
-                  <Button type="button" variant="ghost">
+                  <Button type="button" variant="ghost" className="w-full sm:w-auto">
                     Cancel
                   </Button>
                 </Link>
-                <Button type="submit" disabled={!isValid || isSubmitting}>
+                <Button
+                  type="submit"
+                  disabled={!isValid || isSubmitting || isPending}
+                  className="w-full sm:w-auto"
+                >
                   Continue
                 </Button>
               </div>

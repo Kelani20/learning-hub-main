@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Clock, CopyCheck, Edit2 } from "lucide-react";
 
 import { db } from "@/lib/db";
+import { getDemoGames } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 
 type Props = {
   limit: number;
@@ -10,15 +12,21 @@ type Props = {
 };
 
 const HistoryComponent = async ({ limit, userId }: Props) => {
-  const games = await db.game.findMany({
-    take: limit,
-    where: {
-      userId,
-    },
-    orderBy: {
-      timeStarted: "desc",
-    },
-  });
+  const games =
+    isDemoMode && !hasDatabaseUrl
+      ? getDemoGames(userId, limit)
+      : await db.game.findMany({
+          take: limit,
+          where: {
+            userId,
+          },
+          orderBy: {
+            timeStarted: "desc",
+          },
+        }).catch((error) => {
+          console.log("[QUIZ_HISTORY_FULL]", error);
+          return isDemoMode ? getDemoGames(userId, limit) : [];
+        });
   
   return (
     <div className="space-y-8">

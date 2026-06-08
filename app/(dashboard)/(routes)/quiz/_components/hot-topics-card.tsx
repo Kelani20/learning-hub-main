@@ -1,5 +1,7 @@
 import React from "react";
 import { db } from "@/lib/db";
+import { getDemoTopicCounts } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 
 import {
   Card,
@@ -11,13 +13,23 @@ import {
 import WordCloud from "./word-cloud";
 
 const HotTopicsCard = async () => {
-  const topics = await db.topic_count.findMany({});
+  const topics =
+    isDemoMode && !hasDatabaseUrl
+      ? []
+      : await db.topic_count.findMany({}).catch((error) => {
+          console.log("[HOT_TOPICS_CARD]", error);
+          return [];
+        });
   const formattedTopics = topics.map((topic) => {
     return {
       text: topic.topic,
       value: topic.count,
     };
   });
+  const visibleTopics =
+    formattedTopics.length === 0 && isDemoMode
+      ? getDemoTopicCounts()
+      : formattedTopics;
   
   return (
     <Card className="col-span-4 overflow-hidden border-slate-200 shadow-sm">
@@ -30,7 +42,7 @@ const HotTopicsCard = async () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4">
-        <WordCloud formattedTopics={formattedTopics} />
+        <WordCloud formattedTopics={visibleTopics} />
       </CardContent>
     </Card>
   );

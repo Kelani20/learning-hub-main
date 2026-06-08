@@ -3,6 +3,8 @@ import Link from "next/link";
 import React from "react";
 
 import { db } from "@/lib/db";
+import { getDemoGames } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 
 const History = async ({
   limit, 
@@ -11,15 +13,21 @@ const History = async ({
   limit: number;
   userId: string;
 }) => {
-  const games = await db.game.findMany({
-    take: limit,
-    where: {
-      userId,
-    },
-    orderBy: {
-      timeStarted: "desc",
-    },
-  });
+  const games =
+    isDemoMode && !hasDatabaseUrl
+      ? getDemoGames(userId, limit)
+      : await db.game.findMany({
+          take: limit,
+          where: {
+            userId,
+          },
+          orderBy: {
+            timeStarted: "desc",
+          },
+        }).catch((error) => {
+          console.log("[QUIZ_HISTORY]", error);
+          return isDemoMode ? getDemoGames(userId, limit) : [];
+        });
   return (
     <div className="space-y-8">
       {games.map((game) => {

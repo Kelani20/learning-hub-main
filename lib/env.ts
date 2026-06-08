@@ -33,3 +33,4 @@ const envSchema = z.object({
 export const env = envSchema.parse(process.env);
 
 export const isDemoMode = env.NEXT_PUBLIC_DEMO_MODE;
+export const hasDatabaseUrl = !!env.DATABASE_URL;

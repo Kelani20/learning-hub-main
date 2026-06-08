@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
+import { getDemoChapters, getDemoCourse } from "@/lib/demo-data";
+import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 
 const CourseIdPage = async ({
   params 
@@ -10,21 +12,38 @@ const CourseIdPage = async ({
   }>
 }) => {
   const { courseId } = await params;
-  const course = await db.course.findUnique({
-    where: {
-      id: courseId,
-    },
-    include: {
-      chapters: {
-        where: {
-          isPublished: true,
-        },
-        orderBy: {
-          position: "asc",
-        },
-      },
-    },
-  });
+  const course =
+    isDemoMode && !hasDatabaseUrl && getDemoCourse(courseId)
+      ? null
+      : await db.course
+          .findUnique({
+            where: {
+              id: courseId,
+            },
+            include: {
+              chapters: {
+                where: {
+                  isPublished: true,
+                },
+                orderBy: {
+                  position: "asc",
+                },
+              },
+            },
+          })
+          .catch((error) => {
+            console.log("[COURSE_ID_PAGE]", error);
+            return null;
+          });
+
+  if (!course && isDemoMode) {
+    const demoCourse = getDemoCourse(courseId);
+    const firstDemoChapter = getDemoChapters(courseId)[0];
+
+    if (demoCourse && firstDemoChapter) {
+      return redirect(`/courses/${demoCourse.id}/chapters/${firstDemoChapter.id}`);
+    }
+  }
 
   if (!course) {
     return redirect("/sign-in");
