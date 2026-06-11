@@ -28,6 +28,20 @@ const envSchema = z.object({
   STRIPE_WEBHOOK_SECRET: optionalString,
   MUX_TOKEN_ID: optionalString,
   MUX_TOKEN_SECRET: optionalString,
+  UPLOADTHING_APP_ID: optionalString,
+  UPLOADTHING_SECRET: optionalString,
+  GITHUB_CLIENT_ID: optionalString,
+  NOTION_API_KEY: optionalString,
+  GOOGLE_CLIENT_ID: optionalString,
+  SLACK_BOT_TOKEN: optionalString,
+  WEBHOOK_SIGNING_SECRET: optionalString,
+  SENTRY_DSN: optionalString,
+  NEXT_PUBLIC_POSTHOG_KEY: optionalString,
+  NEXT_PUBLIC_SUPABASE_URL: optionalString,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: optionalString,
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: optionalString,
+  SUPABASE_SECRET_KEY: optionalString,
+  SUPABASE_SERVICE_ROLE_KEY: optionalString,
 });
 
 export const env = envSchema.parse(process.env);

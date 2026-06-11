@@ -30,24 +30,24 @@ const users: Record<"learner" | "instructor", AppUser> = {
   },
 };
 
-function selectedDemoRole() {
-  const cookieStore = cookies() as unknown as {
+async function selectedDemoRole() {
+  const cookieStore = (await cookies()) as unknown as {
     get: (name: string) => { value: string } | undefined;
   };
   const selected = cookieStore.get("learning-hub-demo-role")?.value;
   return selected === "instructor" ? "instructor" : "learner";
 }
 
-export function getDemoUser() {
-  return users[selectedDemoRole()];
+export async function getDemoUser() {
+  return users[await selectedDemoRole()];
 }
 
-export function auth() {
-  return { userId: getDemoUser().id };
+export async function auth() {
+  return { userId: (await getDemoUser()).id };
 }
 
 export async function currentUser(): Promise<ClerkLikeUser> {
-  const user = getDemoUser();
+  const user = await getDemoUser();
   return {
     ...user,
     fullName: user.name,

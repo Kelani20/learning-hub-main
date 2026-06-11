@@ -15,7 +15,7 @@ const checkAnswerSchema = z.object({
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });

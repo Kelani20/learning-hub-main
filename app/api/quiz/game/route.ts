@@ -10,7 +10,7 @@ import { quizCreationSchema } from "@/lib/quiz/schema";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return new Response("Unauthorized", { status: 401 });

@@ -2,20 +2,37 @@ import Stripe from "stripe";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
-import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
+import { env } from "@/lib/env";
 
 export async function POST(req: Request) {
+  if (env.PAYMENT_PROVIDER !== "stripe") {
+    return new NextResponse("Stripe webhooks are not enabled", { status: 404 });
+  }
+
+  if (!env.STRIPE_WEBHOOK_SECRET) {
+    return new NextResponse("Stripe webhook secret is not configured", {
+      status: 503,
+    });
+  }
+
   const body = await req.text();
   const signature = (await headers()).get("Stripe-Signature") as string;
+
+  if (!signature) {
+    return new NextResponse("Webhook Error: Missing Stripe signature", {
+      status: 400,
+    });
+  }
 
   let event: Stripe.Event;
 
   try {
+    const { stripe } = await import("@/lib/stripe");
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
+      env.STRIPE_WEBHOOK_SECRET
     );
   } catch (error: any) {
     return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
@@ -27,7 +44,7 @@ export async function POST(req: Request) {
 
   if (event.type == "checkout.session.completed") {
     if (!userId || !courseId) {
-      return new NextResponse(`Webhool Error: Missing metadata`, {
+      return new NextResponse(`Webhook Error: Missing metadata`, {
         status: 400,
       });
     }

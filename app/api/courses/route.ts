@@ -6,7 +6,7 @@ import { isAdmin } from "@/lib/admin";
 
 export async function POST(req: Request) {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const { title } = await req.json();
 
     if (!userId || !isAdmin(userId)) {

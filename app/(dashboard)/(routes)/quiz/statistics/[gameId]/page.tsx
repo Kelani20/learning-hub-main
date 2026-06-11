@@ -21,7 +21,7 @@ const Statistics = async ({
   }>;
 }) => {
   const { gameId } = await params;
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return redirect("/sign-in");

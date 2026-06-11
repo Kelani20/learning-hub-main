@@ -12,7 +12,7 @@ const Quiz = async ({
   }>;
 }) => {
   const { topic = "" } = await searchParams;
-  const { userId } = auth();
+  const { userId } = await auth();
   
   if (!userId) {
     redirect("/sign-in");

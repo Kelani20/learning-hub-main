@@ -10,7 +10,7 @@ import { formatPrice } from "@/lib/format";
 
 interface CourseEnrollButtonProps {
   price: number;
-  courseId: String;
+  courseId: string;
 }
 
 export const CourseEnrollButton = ({
@@ -21,6 +21,11 @@ export const CourseEnrollButton = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = async () => {
+    if (price > 0) {
+      router.push(`/checkout/${courseId}`);
+      return;
+    }
+
     try {
       setIsLoading(true);
 

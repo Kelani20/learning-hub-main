@@ -13,7 +13,7 @@ export async function PUT(
   let isCompleted = false;
 
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const body = await req.json();
     isCompleted = !!body.isCompleted;
 
@@ -78,7 +78,7 @@ export async function PUT(
   } catch (error) {
     console.log("[CHAPTER_ID_PROGRESS]", error);
     if (isDemoMode && isDemoCourseId(courseId)) {
-      const { userId } = auth();
+      const { userId } = await auth();
 
       return NextResponse.json({
         id: `progress_${userId}_${courseId}_${chapterId}`,

@@ -6,8 +6,8 @@ import HistoryCard from "./_components/history-card";
 import HotTopicsCard from "./_components/hot-topics-card";
 import RecentActivityCard from "./_components/recent-activity-card";
 
-const QuizPage = () => {
-  const { userId } = auth();
+const QuizPage = async () => {
+  const { userId } = await auth();
 
   if (!userId) {
     redirect("/sign-in");

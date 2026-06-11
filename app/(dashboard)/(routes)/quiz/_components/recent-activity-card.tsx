@@ -15,7 +15,7 @@ import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 import History from "./history";
 
 const RecentActivityCard = async () => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) {
     return redirect("/sign-in");
   }

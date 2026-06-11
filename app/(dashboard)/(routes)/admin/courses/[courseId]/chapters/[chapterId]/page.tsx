@@ -21,7 +21,7 @@ const ChapterId = async ({
   }>;
 }) => {
   const { courseId, chapterId } = await params;
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return redirect("/sign-up");

@@ -13,7 +13,7 @@ export async function POST(
   { params }: { params: Promise<{ threadId: string }> }
 ) {
   const { threadId } = await params;
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return new NextResponse("Unauthorized", { status: 401 });

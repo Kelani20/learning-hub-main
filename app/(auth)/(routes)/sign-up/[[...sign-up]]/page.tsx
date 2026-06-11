@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { DemoAuthPanel } from "@/components/auth/demo-auth-panel";
 
 export default function Page() {
-  redirect("/dashboard");
+  return <DemoAuthPanel mode="sign-up" />;
 }

@@ -9,7 +9,7 @@ export const PATCH = async (
   { params }: { params: Promise<{ courseId: string }> }
   ) => {
   try {
-    const { userId } = auth();
+    const { userId } = await auth();
     const { courseId } = await params;
     const values = await req.json();
 
@@ -40,7 +40,7 @@ export const DELETE = async (
   ) => {
   try {
     const { courseId } = await params;
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 })

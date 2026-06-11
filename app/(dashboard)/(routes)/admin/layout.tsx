@@ -3,13 +3,13 @@ import { redirect } from "next/navigation";
 
 import { isAdmin } from "@/lib/admin";
 
-const DashboardLayout = ({
+const DashboardLayout = async ({
   children
 }: {
   children: React.ReactNode
 } 
 ) => {
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!isAdmin(userId)) {
     return redirect("/dashboard");

@@ -21,7 +21,7 @@ const CourseLayout = async ({
   params: Promise<{ courseId: string }>;
 }) => {
   const { courseId } = await params;
-  const { userId } = auth();
+  const { userId } = await auth();
 
   if (!userId) {
     return redirect("/sign-in");

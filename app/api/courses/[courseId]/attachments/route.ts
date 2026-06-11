@@ -9,7 +9,7 @@ export async function POST(
 ) {
   try {
     const { courseId } = await params;
-    const { userId } = auth();
+    const { userId } = await auth();
     const { url } = await req.json();
 
     if (!userId) {

@@ -14,14 +14,26 @@ export function DemoUserButton() {
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <Button size="sm" variant="outline" onClick={() => switchRole("learner")}>
-        <GraduationCap className="mr-2 h-4 w-4" />
-        Learner
+    <div className="flex items-center gap-1 sm:gap-2">
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => switchRole("learner")}
+        aria-label="Switch to learner role"
+        className="h-10 w-10 rounded-full px-0 sm:w-auto sm:rounded-md sm:px-3"
+      >
+        <GraduationCap className="h-4 w-4 sm:mr-2" />
+        <span className="hidden sm:inline">Learner</span>
       </Button>
-      <Button size="sm" variant="outline" onClick={() => switchRole("instructor")}>
-        <ShieldCheck className="mr-2 h-4 w-4" />
-        Instructor
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => switchRole("instructor")}
+        aria-label="Switch to instructor role"
+        className="h-10 w-10 rounded-full px-0 sm:w-auto sm:rounded-md sm:px-3"
+      >
+        <ShieldCheck className="h-4 w-4 sm:mr-2" />
+        <span className="hidden sm:inline">Instructor</span>
       </Button>
     </div>
   );

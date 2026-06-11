@@ -5,8 +5,8 @@ import { isAdmin } from "@/lib/admin";
 
 const f = createUploadthing();
  
-const handleAuth = () => { 
-  const { userId } = auth();
+const handleAuth = async () => {
+  const { userId } = await auth();
   const isAuthorized = isAdmin(userId);
 
   if (!userId || !isAuthorized) {

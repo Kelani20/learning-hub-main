@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { BarChart, Compass, Layout, List, MessagesSquare, ClipboardList } from "lucide-react";
+import { BarChart, ClipboardList, Compass, Layout, List, MessagesSquare, Plug } from "lucide-react";
 
 import SidebarItem from "./sidebar-item";
 
@@ -25,6 +25,11 @@ const guestRoutes = [
     icon: ClipboardList,
     label: "Quiz",
     href: "/quiz"
+  },
+  {
+    icon: Plug,
+    label: "Integrations",
+    href: "/integrations",
   },
 ];
 

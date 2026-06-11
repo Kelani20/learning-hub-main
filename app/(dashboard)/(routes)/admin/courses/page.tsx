@@ -8,7 +8,7 @@ import { demoCourses } from "@/lib/demo-data";
 import { hasDatabaseUrl, isDemoMode } from "@/lib/env";
 
 const CoursesPage = async () => {
-  const { userId } = auth();
+  const { userId } = await auth();
   
   if (!userId) {
     return redirect('/sign-in');

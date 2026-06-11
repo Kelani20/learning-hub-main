@@ -9,7 +9,7 @@ export async function PATCH(
 ) {
   try {
     const { courseId } = await params;
-    const { userId } = auth();
+    const { userId } = await auth();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 })

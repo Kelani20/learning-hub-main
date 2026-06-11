@@ -32,7 +32,7 @@ export const CoursesList = ({
         ))}
       </div>
       {items.length === 0 && (
-        <div className="mt-10 rounded-md border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
+        <div className="mt-10 rounded-md border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
           No courses found
         </div>
       )}

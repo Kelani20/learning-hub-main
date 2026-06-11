@@ -1,4 +1,4 @@
-import Stripe from "stripe";
+import type Stripe from "stripe";
 import { currentUser } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
@@ -11,14 +11,14 @@ export async function POST(
 ) {
   try {
     const { courseId } = await params;
-    if (env.PAYMENT_PROVIDER !== "stripe") {
-      return new NextResponse("Stripe checkout is not enabled", { status: 400 });
-    }
-
     const user = await currentUser();
 
     if (!user || !user.id || !user.emailAddresses?.[0]?.emailAddress) {
       return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    if (env.PAYMENT_PROVIDER !== "stripe") {
+      return NextResponse.json({ url: `/checkout/${courseId}` });
     }
 
     const course = await db.course.findUnique({
