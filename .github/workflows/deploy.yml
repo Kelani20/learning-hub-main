@@ -1,0 +1,76 @@
+name: Deploy to production
+
+# Deploys the app to your own server (the one running the Cloudflare Tunnel)
+# on every push to main. It SSHes in, pulls the new code, rebuilds, and
+# restarts the Next.js process — then optionally purges the Cloudflare cache.
+#
+# It SKIPS automatically until you configure the secrets below, so the first
+# push after adding this file will not fail.
+#
+# Required repository secrets (Settings → Secrets and variables → Actions):
+#   SSH_HOST       your server's hostname or IP (e.g. 203.0.113.10)
+#   SSH_USER       the SSH user (e.g. usama)
+#   SSH_KEY        the PRIVATE SSH key (PEM/OpenSSH) authorized on the server
+#   DEPLOY_PATH    absolute path to the repo clone on the server (e.g. /home/usama/learning-hub-main)
+# Optional secrets:
+#   SSH_PORT       SSH port (defaults to 22)
+#   CF_ZONE_ID     Cloudflare Zone ID for usamakelani.com  (enables cache purge)
+#   CF_API_TOKEN   Cloudflare API token with "Cache Purge" permission
+# Optional variable (Settings → Secrets and variables → Actions → Variables):
+#   DEPLOY_RESTART the command that restarts the app (defaults to: pm2 restart learning-hub)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HAS_SSH: ${{ secrets.SSH_HOST }}
+      HAS_CF: ${{ secrets.CF_ZONE_ID }}
+    steps:
+      - name: Notice (secrets not set)
+        if: env.HAS_SSH == ''
+        run: |
+          echo "::warning title=Deploy skipped::SSH secrets are not configured yet."
+          echo "Add SSH_HOST, SSH_USER, SSH_KEY and DEPLOY_PATH in"
+          echo "Settings → Secrets and variables → Actions, then re-run this workflow."
+
+      - name: Deploy over SSH
+        if: env.HAS_SSH != ''
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script_stop: true
+          script: |
+            set -e
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+            cd "${{ secrets.DEPLOY_PATH }}"
+            echo "Deploying $(git rev-parse --short HEAD 2>/dev/null) -> origin/main"
+            git fetch --all --prune
+            git reset --hard origin/main
+            npm install --legacy-peer-deps
+            npx prisma generate
+            npm run build
+            ${{ vars.DEPLOY_RESTART || 'pm2 restart learning-hub' }}
+            echo "Deployed $(git rev-parse --short HEAD)"
+
+      - name: Purge Cloudflare cache
+        if: env.HAS_SSH != '' && env.HAS_CF != ''
+        run: |
+          curl -sS -X POST \
+            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
+            -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}'
+          echo "Cloudflare cache purged."
