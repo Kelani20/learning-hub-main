@@ -63,10 +63,10 @@ export const CategoryForm = ({
   const selectedOption = options.find((option) => (option.value === initialData.categoryId));
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+    <div className="product-muted mt-6 rounded-2xl p-4">
+      <div className="font-bold flex items-center justify-between text-slate-950 dark:text-white">
         Course Category
-        <Button onClick={toggleEdit} variant="ghost">
+        <Button onClick={toggleEdit} variant="ghost" className="cursor-pointer rounded-full">
           {isEditing ? (
             <>Cancel</>
             ): (
@@ -79,8 +79,8 @@ export const CategoryForm = ({
       </div>
       {!isEditing && (
         <p className={cn(
-          "text-sm mt-2",
-          !initialData && "text-slate-500 italic"
+          "text-sm mt-2 text-slate-700 dark:text-slate-200",
+          !selectedOption && "text-slate-500 italic dark:text-slate-400"
         )}>
           {selectedOption?.label || "No category provided."}
         </p>
@@ -109,6 +109,7 @@ export const CategoryForm = ({
               <Button
                 disabled={!isValid || isSubmitting}
                 type="submit"
+                className="cursor-pointer rounded-full bg-brand-500 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Save
               </Button>

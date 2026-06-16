@@ -99,24 +99,25 @@ const IntegrationsPage = () => {
 
   return (
     <div className="min-h-full bg-slate-50 p-4 dark:bg-slate-950 sm:p-6">
-      <section className="overflow-hidden rounded-md border border-slate-200 bg-slate-950 text-white shadow-sm">
-        <div className="grid gap-8 p-6 lg:grid-cols-[1.35fr_0.65fr] lg:p-8">
+      <section className="glass-panel motion-rise relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 text-white shadow-elevate-dark">
+        <div className="pointer-events-none absolute inset-0 bg-grid-faint opacity-60" />
+        <div className="relative grid gap-8 p-6 lg:grid-cols-[1.35fr_0.65fr] lg:p-8">
           <div>
-            <div className="inline-flex items-center gap-x-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-bold text-cyan-100">
+            <div className="inline-flex items-center gap-x-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-3 py-1 text-xs font-bold text-brand-200">
               <Plug className="h-3.5 w-3.5" />
-              Production connector hub
+              Integrations
             </div>
-            <h1 className="mt-5 max-w-3xl text-3xl font-black leading-tight tracking-normal sm:text-4xl">
-              See what is live, what is configured, and what is ready to wire next.
+            <h1 className="mt-5 max-w-3xl text-balance text-3xl font-black leading-tight tracking-tight sm:text-4xl">
+              Everything Learning Hub connects to, in one place.
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-300">
-              Learning Hub stays usable in demo mode while keeping the production
-              provider path visible for video, payments, uploads, content imports,
-              automations, analytics, and monitoring.
+            <p className="mt-4 max-w-2xl text-pretty text-sm leading-6 text-slate-300">
+              Video, payments, uploads, content imports, automations, analytics, and
+              monitoring all plug into the same workspace. See what is live, connect a
+              provider, and extend the platform without touching the core learning flow.
             </p>
             <div className="mt-6 flex flex-col gap-2 sm:flex-row">
               <Link href="/admin/courses">
-                <Button className="keep-light h-11 rounded-full bg-white px-5 font-bold text-slate-950 hover:bg-cyan-50">
+                <Button className="keep-light h-11 cursor-pointer rounded-full bg-brand-500 px-5 font-bold text-white shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 hover:shadow-lg">
                   Open instructor studio
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -124,7 +125,7 @@ const IntegrationsPage = () => {
               <Link href="/dashboard">
                 <Button
                   variant="outline"
-                  className="h-11 rounded-full border-white/20 bg-white/10 px-5 font-bold text-white hover:bg-white/15 hover:text-white"
+                  className="h-11 cursor-pointer rounded-full border-white/20 bg-white/10 px-5 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-white/15 hover:text-white"
                 >
                   Back to workspace
                 </Button>
@@ -134,17 +135,17 @@ const IntegrationsPage = () => {
 
           <div className="grid grid-cols-2 gap-3">
             {[
-              { label: "Connectors", value: summary.total },
-              { label: "Ready now", value: summary.ready },
-              { label: "Demo live", value: summary.live },
-              { label: "Needs setup", value: summary.needsSetup },
+              { label: "Integrations", value: summary.total },
+              { label: "Connected", value: summary.ready },
+              { label: "Live", value: summary.live },
+              { label: "Available", value: summary.needsSetup },
             ].map((item) => (
               <div
                 key={item.label}
-                className="rounded-md border border-white/10 bg-white/10 p-4"
+                className="rounded-xl border border-white/10 bg-white/5 p-4 transition-colors duration-200 hover:border-brand-500/30 hover:bg-white/10"
               >
-                <p className="text-3xl font-black tracking-normal">{item.value}</p>
-                <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-300">
+                <p className="text-3xl font-black tabular-nums tracking-tight">{item.value}</p>
+                <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">
                   {item.label}
                 </p>
               </div>
@@ -154,40 +155,42 @@ const IntegrationsPage = () => {
       </section>
 
       <section className="mt-6 grid gap-4 lg:grid-cols-3">
-        <div className="product-surface rounded-md p-5">
-          <p className="text-sm font-black uppercase tracking-[0.14em] text-teal-700">
-            Launch posture
+        <div className="product-surface motion-rise rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+          <p className="text-sm font-black uppercase tracking-[0.14em] text-brand-600 dark:text-brand-400">
+            Architecture
           </p>
-          <h2 className="mt-3 text-2xl font-black tracking-normal text-slate-950">
-            Demo-first, production-aware.
+          <h2 className="mt-3 text-balance text-2xl font-black tracking-tight text-slate-950 dark:text-white">
+            Production-ready architecture.
           </h2>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Reviewers can use the product without paid accounts. Operators can still
-            see the provider switches and environment keys needed for a private launch.
+          <p className="mt-3 text-pretty text-sm leading-6 text-slate-600 dark:text-slate-300">
+            Every integration is a swappable provider behind a stable interface. Connect
+            a service by adding its keys, and the platform routes to it instantly with no
+            changes to your courses or learner experience.
           </p>
         </div>
-        <div className="product-surface rounded-md p-5">
-          <p className="text-sm font-black uppercase tracking-[0.14em] text-amber-700">
+        <div className="product-surface motion-rise-delay-1 rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+          <p className="text-sm font-black uppercase tracking-[0.14em] text-brand-600 dark:text-brand-400">
             Coverage
           </p>
-          <h2 className="mt-3 text-2xl font-black tracking-normal text-slate-950">
-            {summary.ready} of {summary.total} connectors ready.
+          <h2 className="mt-3 text-balance text-2xl font-black tracking-tight text-slate-950 dark:text-white">
+            <span className="tabular-nums">{summary.ready}</span> of{" "}
+            <span className="tabular-nums">{summary.total}</span> connected.
           </h2>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Core learning flows are live. Optional imports, automation, and telemetry
-            are displayed as setup-ready connector plans until their keys are present.
+          <p className="mt-3 text-pretty text-sm leading-6 text-slate-600 dark:text-slate-300">
+            Core learning flows run live out of the box. Imports, automation, and
+            telemetry are ready to connect the moment you add their keys.
           </p>
         </div>
-        <div className="product-surface rounded-md p-5">
-          <p className="text-sm font-black uppercase tracking-[0.14em] text-rose-700">
-            Next best step
+        <div className="product-surface motion-rise-delay-2 rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+          <p className="text-sm font-black uppercase tracking-[0.14em] text-brand-600 dark:text-brand-400">
+            Recommended next
           </p>
-          <h2 className="mt-3 text-2xl font-black tracking-normal text-slate-950">
-            Wire observability before traffic.
+          <h2 className="mt-3 text-balance text-2xl font-black tracking-tight text-slate-950 dark:text-white">
+            Turn on observability.
           </h2>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
-            Sentry and product analytics make the demo safer to run publicly and make
-            the product story more credible when real users arrive.
+          <p className="mt-3 text-pretty text-sm leading-6 text-slate-600 dark:text-slate-300">
+            Connect Sentry and product analytics to see errors and learner activity in
+            real time, so you can ship confidently as your audience grows.
           </p>
         </div>
       </section>
@@ -197,14 +200,14 @@ const IntegrationsPage = () => {
           <section key={category}>
             <div className="mb-3 flex items-end justify-between gap-4">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-600 dark:text-brand-400">
                   Connector group
                 </p>
-                <h2 className="mt-1 text-xl font-black tracking-normal text-slate-950">
+                <h2 className="mt-1 text-xl font-black tracking-tight text-slate-950 dark:text-white">
                   {category}
                 </h2>
               </div>
-              <Badge variant="outline" className="bg-white dark:bg-slate-900">
+              <Badge variant="outline" className="rounded-full bg-white dark:bg-slate-900">
                 {groupedConnectors[category].length} items
               </Badge>
             </div>
@@ -217,10 +220,10 @@ const IntegrationsPage = () => {
                 return (
                   <article
                     key={connector.id}
-                    className="product-surface flex min-h-[250px] flex-col rounded-md p-5 transition hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg dark:hover:border-slate-700"
+                    className="product-surface group flex min-h-[250px] flex-col rounded-2xl p-5 transition-all duration-200 hover:-translate-y-1 hover:border-brand-500/40 hover:shadow-lg dark:hover:border-brand-500/40"
                   >
                     <div className="flex items-start justify-between gap-4">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-md bg-slate-950 text-white dark:bg-white dark:text-slate-950">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950 text-white transition-colors duration-200 group-hover:bg-brand-600 dark:bg-white dark:text-slate-950 dark:group-hover:bg-brand-500 dark:group-hover:text-white">
                         <Icon className="h-5 w-5" />
                       </div>
                       <div
@@ -231,37 +234,37 @@ const IntegrationsPage = () => {
                       </div>
                     </div>
                     <div className="mt-5">
-                      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+                      <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
                         {connector.provider}
                       </p>
-                      <h3 className="mt-1 text-lg font-black tracking-normal text-slate-950">
+                      <h3 className="mt-1 text-lg font-black tracking-tight text-slate-950 dark:text-white">
                         {connector.name}
                       </h3>
-                      <p className="mt-3 text-sm leading-6 text-slate-600">
+                      <p className="mt-3 text-pretty text-sm leading-6 text-slate-600 dark:text-slate-300">
                         {connector.description}
                       </p>
                     </div>
                     <div className="mt-auto pt-5">
-                      <div className="rounded-md border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">
-                        <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+                      <div className="rounded-xl border border-slate-100 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">
+                        <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
                           Signal
                         </p>
-                        <p className="mt-1 text-sm font-semibold text-slate-800">
+                        <p className="mt-1 text-sm font-semibold text-slate-800 dark:text-slate-100">
                           {connector.signal}
                         </p>
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
                         {connector.requiredEnv.length > 0 ? (
                           connector.requiredEnv.map((key) => (
-                            <Badge key={key} variant="secondary">
+                            <Badge key={key} variant="secondary" className="font-mono text-xs">
                               {key}
                             </Badge>
                           ))
                         ) : (
-                          <Badge variant="secondary">No paid keys required</Badge>
+                          <Badge variant="secondary">Included, no extra keys</Badge>
                         )}
                       </div>
-                      <p className="mt-3 text-sm font-semibold text-slate-700">
+                      <p className="mt-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
                         {connector.action}
                       </p>
                     </div>

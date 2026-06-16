@@ -32,13 +32,13 @@ const HotTopicsCard = async () => {
       : formattedTopics;
   
   return (
-    <Card className="col-span-4 overflow-hidden border-slate-200 shadow-sm">
-      <CardHeader className="border-b border-slate-100 bg-white">
-        <CardTitle className="text-2xl tracking-normal">
-          Hot Topics
+    <Card className="col-span-4 overflow-hidden rounded-2xl border-slate-200 shadow-sm product-surface dark:border-slate-800">
+      <CardHeader className="border-b border-slate-100 bg-white dark:border-slate-800 dark:bg-transparent">
+        <CardTitle className="text-2xl font-black tracking-normal text-slate-950 dark:text-slate-50">
+          Trending topics
         </CardTitle>
-        <CardDescription className="text-sm text-slate-600">
-          See what topics are trending in the community.
+        <CardDescription className="text-sm text-slate-600 dark:text-slate-400">
+          See which subjects learners are practicing most. Tap any topic to start a quiz.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4">

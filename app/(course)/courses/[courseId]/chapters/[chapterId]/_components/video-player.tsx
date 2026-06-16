@@ -4,7 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Lock } from "lucide-react";
+import { Loader2, Lock, PlayCircle } from "lucide-react";
 import MuxPlayer from "@mux/mux-player-react";
 
 import { cn } from "@/lib/utils";
@@ -59,23 +59,29 @@ export const VideoPlayer = ({
   };
 
   return (
-    <div className="relative aspect-video">
+    <div className="relative aspect-video overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-sm dark:border-slate-800 dark:shadow-elevate-dark">
       {!isReady && !isLocked && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-800">
-          <Loader2 className="h-8 w-8 animate-spin text-secondary" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-y-3 bg-slate-950">
+          <Loader2 className="h-8 w-8 animate-spin text-brand-400" />
+          <p className="text-xs font-medium text-slate-400">Loading lesson...</p>
         </div>
       )}
       {isLocked && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-800 flex-col gap-y-2 text-secondary">
-          <Lock className="h-8 w-8" />
-          <p className="text-sm">This Chapter is locked</p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-y-3 bg-slate-950 px-6 text-center">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-500/10 ring-1 ring-brand-500/20">
+            <Lock className="h-6 w-6 text-brand-400" />
+          </div>
+          <p className="text-sm font-medium text-slate-200">This lesson is locked</p>
+          <p className="max-w-xs text-xs text-slate-400">
+            Enroll in the course to unlock this chapter and track your progress.
+          </p>
         </div>
       )}
       {!isLocked && videoUrl && (
         <iframe
           title={title}
           src={videoUrl}
-          className={cn("h-full w-full rounded-md border-0", !isReady && "hidden")}
+          className={cn("h-full w-full border-0", !isReady && "hidden")}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           onLoad={() => setIsReady(true)}
@@ -84,7 +90,7 @@ export const VideoPlayer = ({
       {!isLocked && !videoUrl && playbackId && (
         <MuxPlayer
           title={title}
-          className={cn(!isReady && "hidden")}
+          className={cn("h-full w-full", !isReady && "hidden")}
           onCanPlay={() => setIsReady(true)}
           onEnded={onEnd}
           autoPlay
@@ -92,8 +98,9 @@ export const VideoPlayer = ({
         />
       )}
       {!isLocked && !videoUrl && !playbackId && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-100 text-sm text-slate-600">
-          No video has been added for this lesson yet.
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-y-2 bg-slate-100 px-6 text-center text-sm text-slate-600 dark:bg-slate-900 dark:text-slate-300">
+          <PlayCircle className="h-8 w-8 text-slate-400 dark:text-slate-500" />
+          <p>The video for this lesson is on its way.</p>
         </div>
       )}
     </div>

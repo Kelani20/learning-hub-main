@@ -32,13 +32,18 @@ const RecentActivityCard = async () => {
         });
 
   return (
-    <Card className="col-span-4 border-slate-200 bg-white shadow-sm lg:col-span-3">
+    <Card className="col-span-4 rounded-2xl border-slate-200 bg-white shadow-sm product-surface dark:border-slate-800 lg:col-span-3">
       <CardHeader>
-        <CardTitle className="text-2xl font-black tracking-normal text-slate-950">
-          <Link href="/quiz/history">Recent Activity</Link>
+        <CardTitle className="text-2xl font-black tracking-normal text-slate-950 dark:text-slate-50">
+          <Link
+            href="/quiz/history"
+            className="rounded-md transition-colors hover:text-teal-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 dark:hover:text-teal-400"
+          >
+            Recent activity
+          </Link>
         </CardTitle>
-        <CardDescription className="text-slate-600">
-          You have played a total of {games_count} quizzes.
+        <CardDescription className="text-slate-600 dark:text-slate-400">
+          You have completed {games_count} {games_count === 1 ? "quiz" : "quizzes"} so far.
         </CardDescription>
       </CardHeader>
       <CardContent className="max-h-[580px] overflow-auto">

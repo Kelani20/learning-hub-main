@@ -19,8 +19,6 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Editor } from "@/components/editor";
-import { Preview } from "@/components/preview";
 import { Checkbox } from "@/components/ui/checkbox";
 
 interface ChapterAccessFormProps {
@@ -64,10 +62,10 @@ export const ChapterAccessForm = ({
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+    <div className="product-muted mt-6 rounded-2xl p-4">
+      <div className="font-bold flex items-center justify-between text-slate-950 dark:text-white">
         Chapter Access Settings
-        <Button onClick={toggleEdit} variant="ghost">
+        <Button onClick={toggleEdit} variant="ghost" className="cursor-pointer rounded-full">
           {isEditing ? (
             <>Cancel</>
             ): (
@@ -80,8 +78,8 @@ export const ChapterAccessForm = ({
       </div>
       {!isEditing && (
         <p className={cn(
-          "text-sm mt-2",
-          !initialData.isFree && "text-slate-500 italic"
+          "text-sm mt-2 text-slate-700 dark:text-slate-200",
+          !initialData.isFree && "text-slate-500 italic dark:text-slate-400"
         )}>
           {initialData.isFree ? (
             <>This chapter is free.</>
@@ -100,7 +98,7 @@ export const ChapterAccessForm = ({
               control={form.control}
               name="isFree"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-xl border border-slate-200 p-4 dark:border-slate-700">
                   <FormControl>
                     <Checkbox
                       id="make-free"
@@ -110,7 +108,7 @@ export const ChapterAccessForm = ({
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormDescription>
-                      <label htmlFor="make-free" className="">
+                      <label htmlFor="make-free" className="cursor-pointer">
                         Make this chapter free
                       </label>
                     </FormDescription>
@@ -122,6 +120,7 @@ export const ChapterAccessForm = ({
               <Button
                 disabled={!isValid || isSubmitting}
                 type="submit"
+                className="cursor-pointer rounded-full bg-brand-500 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Save
               </Button>

@@ -17,56 +17,58 @@ export const LandingHero = () => {
     <section
       className="learning-hero relative isolate flex min-h-[86vh] items-center overflow-hidden bg-slate-100 pt-24 dark:bg-slate-950"
     >
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-grid-faint opacity-60" />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent dark:from-slate-950" />
       <div className="mx-auto w-full max-w-7xl px-4 pb-12 pt-12 sm:px-6 lg:px-8">
         <div className="motion-rise max-w-3xl">
           <div className="mb-6 inline-flex items-center gap-x-2 rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur dark:border-white/15 dark:bg-white/10 dark:text-slate-100">
-            <Sparkles className="h-4 w-4 text-amber-500" />
-            Portfolio LMS with auth, checkout, quizzes, discussions, and Supabase-ready connectors
+            <Sparkles className="h-4 w-4 text-teal-500" />
+            Courses, adaptive practice, checkout, discussions, and instructor analytics
           </div>
-          <h1 className="max-w-4xl text-5xl font-black leading-[1.02] tracking-normal text-slate-950 sm:text-6xl lg:text-7xl">
-            Learning Hub
+          <h1 className="max-w-4xl text-balance text-5xl font-black leading-[1.02] tracking-tight text-slate-950 dark:text-white sm:text-6xl lg:text-7xl">
+            The learning platform that{" "}
+            <span className="brand-text">ships everything</span> in one place.
           </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-700 sm:text-xl">
-            A full-stack education platform with course management, adaptive practice,
-            fake payments for portfolio testing, role-based demo sign-in, and a visible
-            integration command center recruiters can actually inspect.
+          <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-slate-700 dark:text-slate-300 sm:text-xl">
+            Learning Hub brings course management, adaptive practice, secure
+            enrollment, course discussions, and instructor analytics into a
+            single, modern workspace — with integrations ready when you grow.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/dashboard">
+              <Button className="h-12 cursor-pointer rounded-full bg-teal-600 px-6 text-base font-bold text-white shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:bg-teal-500 hover:shadow-lg">
+                Launch app
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
             <Link href="/sign-in">
-              <Button className="h-12 rounded-full bg-teal-600 px-6 text-base font-bold text-white shadow-lg shadow-teal-900/20 hover:bg-teal-500">
+              <Button className="h-12 cursor-pointer rounded-full bg-slate-950 px-6 text-base font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-slate-200">
                 Sign in
                 <LogIn className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/dashboard">
-              <Button className="h-12 rounded-full bg-slate-950 px-6 text-base font-bold text-white hover:bg-slate-800">
-                Explore Demo
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
             <Link href="/admin/courses">
-              <Button variant="outline" className="h-12 rounded-full border-slate-300 bg-white/85 px-6 text-base font-bold text-slate-950 hover:bg-white">
-                Instructor View
+              <Button variant="outline" className="h-12 cursor-pointer rounded-full border-slate-300 bg-white/85 px-6 text-base font-bold text-slate-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
+                Instructor view
               </Button>
             </Link>
             <Link href="/integrations">
-              <Button variant="outline" className="h-12 rounded-full border-slate-300 bg-white/85 px-6 text-base font-bold text-slate-950 hover:bg-white">
-                Connectors
+              <Button variant="outline" className="h-12 cursor-pointer rounded-full border-slate-300 bg-white/85 px-6 text-base font-bold text-slate-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
+                Integrations
                 <Plug className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
           <div className="mt-10 grid max-w-4xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
             {[
-              { icon: BookOpenCheck, label: "Seeded courses" },
-              { icon: ClipboardCheck, label: "Adaptive quizzes" },
-              { icon: CreditCard, label: "Fake checkout" },
-              { icon: MessageSquare, label: "DB discussions" },
-              { icon: Plug, label: "Supabase path" },
+              { icon: BookOpenCheck, label: "Course library" },
+              { icon: ClipboardCheck, label: "Adaptive practice" },
+              { icon: CreditCard, label: "Secure checkout" },
+              { icon: MessageSquare, label: "Discussions" },
+              { icon: Plug, label: "Integrations" },
             ].map((item) => (
-              <div key={item.label} className="flex items-center gap-x-3 rounded-md border border-white/80 bg-white/80 px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm backdrop-blur dark:border-white/15 dark:bg-white/10 dark:text-slate-100">
-                <item.icon className="h-4 w-4 text-slate-950" />
+              <div key={item.label} className="glass-panel flex items-center gap-x-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-700 transition-all duration-200 hover:-translate-y-0.5 dark:text-slate-100">
+                <item.icon className="h-4 w-4 text-teal-600 dark:text-teal-400" />
                 {item.label}
               </div>
             ))}
@@ -77,25 +79,25 @@ export const LandingHero = () => {
           {[
             {
               label: "Learner workspace",
-              value: "Progress, previews, certificates, next actions",
+              value: "Progress tracking, lesson previews, certificates, and next-best actions.",
             },
             {
               label: "Instructor studio",
-              value: "Publishing, chapters, analytics, uploads",
+              value: "Publishing, chapter management, analytics, and media uploads.",
             },
             {
-              label: "Integration lab",
-              value: "Supabase, payments, video, webhooks, monitoring",
+              label: "Integrations",
+              value: "Supabase, payments, video, webhooks, and monitoring — ready to connect.",
             },
           ].map((item) => (
             <div
               key={item.label}
-              className="rounded-md border border-slate-200 bg-white/85 p-4 shadow-sm backdrop-blur dark:border-white/15 dark:bg-white/10"
+              className="product-surface rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
             >
-              <p className="text-xs font-black uppercase tracking-[0.14em] text-teal-700">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-teal-600 dark:text-teal-400">
                 {item.label}
               </p>
-              <p className="mt-2 text-sm font-semibold leading-6 text-slate-700">
+              <p className="mt-2 text-sm font-semibold leading-6 text-slate-700 dark:text-slate-300">
                 {item.value}
               </p>
             </div>

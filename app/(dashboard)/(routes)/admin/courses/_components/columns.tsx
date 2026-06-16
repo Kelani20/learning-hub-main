@@ -75,8 +75,8 @@ export const columns: ColumnDef<Course>[] = [
 
       return (
         <Badge className={cn(
-          "bg-slate-500",
-          isPublished && "bg-sky-700"
+          "rounded-full bg-slate-500 hover:bg-slate-500",
+          isPublished && "bg-brand-600 hover:bg-brand-600"
         )}>
           {isPublished ? "Published" : "Draft"}
         </Badge>
@@ -91,14 +91,14 @@ export const columns: ColumnDef<Course>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-4 w-8 p-0">
+            <Button variant="ghost" className="h-4 w-8 cursor-pointer p-0">
               <MoreHorizontal className="h-4 w-4" />
               <span className="sr-only">Open menu</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <Link href={`/admin/courses/${id}`}>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
                 <Pencil className="h-4 w-4 mr-2" />
                 Edit
               </DropdownMenuItem>

@@ -49,16 +49,19 @@ const CreatePage = () => {
   };
 
   return (
-    <div className="flex mx-auto max-w-5xl md:items-center md:justify-center h-full p-6">
-      <div>
-        <h1 className="text-2xl">
+    <div className="flex min-h-full items-center justify-center bg-slate-50 p-4 dark:bg-slate-950 sm:p-6">
+      <div className="product-surface motion-rise w-full max-w-2xl rounded-2xl p-6 sm:p-8">
+        <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-600 dark:text-brand-400">
+          New course
+        </p>
+        <h1 className="mt-2 text-balance text-2xl font-black tracking-tight text-slate-950 dark:text-white">
           Name your course
         </h1>
-        <p className="text-sm text-slate-600">
+        <p className="mt-2 text-pretty text-sm leading-6 text-slate-600 dark:text-slate-300">
           Choose a name that describes your course. Don&apos;t worry, you can change this later.
         </p>
         <Form {...form}>
-          <form 
+          <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-8 mt-8"
           >
@@ -74,6 +77,7 @@ const CreatePage = () => {
                     <Input
                       disabled={isSubmitting}
                       placeholder="e.g. 'How to make a website'"
+                      className="transition-colors duration-200 focus-visible:ring-brand-500"
                       {...field}
                     />
                   </FormControl>
@@ -89,6 +93,7 @@ const CreatePage = () => {
                 <Button
                   type="button"
                   variant="ghost"
+                  className="cursor-pointer rounded-full"
                 >
                   Cancel
                 </Button>
@@ -96,6 +101,7 @@ const CreatePage = () => {
               <Button
                 type="submit"
                 disabled={!isValid || isSubmitting}
+                className="cursor-pointer rounded-full bg-brand-500 px-6 font-bold text-white shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Continue
               </Button>

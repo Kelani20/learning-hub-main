@@ -1,11 +1,12 @@
 import Navbar from "./_components/navbar";
 import Sidebar from "./_components/sidebar";
+import { SiteFooter } from "@/components/site-footer";
 
 const DashboardLayout = ({
   children
 }: {
   children: React.ReactNode
-} 
+}
 ) => {
   return (
     <div className="h-full">
@@ -17,6 +18,7 @@ const DashboardLayout = ({
       </div>
       <main className="h-full md:pl-56 pt-[80px]">
         {children}
+        <SiteFooter />
       </main>
     </div>
   );

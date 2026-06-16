@@ -10,22 +10,22 @@ const HistoryCard = () => {
   const router = useRouter();
   return (
     <Card
-      className="border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:cursor-pointer hover:border-amber-300 hover:shadow-lg"
+      className="cursor-pointer rounded-2xl border-slate-200 bg-white shadow-sm transition duration-200 product-surface hover:-translate-y-1 hover:border-teal-400 hover:shadow-lg dark:border-slate-800"
       onClick={() => {
         router.push("/quiz/history");
       }}
     >
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <CardTitle className="text-2xl font-black tracking-normal text-slate-950">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-2xl font-black tracking-normal text-slate-950 dark:text-slate-50">
           History
         </CardTitle>
-        <div className="flex h-11 w-11 items-center justify-center rounded-md bg-amber-50 text-amber-700">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
           <History size={24} strokeWidth={2.5} />
         </div>
       </CardHeader>
       <CardContent>
-        <p className="text-sm leading-6 text-slate-600">
-          View past quiz attempts.
+        <p className="text-sm leading-6 text-slate-600 dark:text-slate-400">
+          Revisit every quiz you have taken and jump back into your results.
         </p>
       </CardContent>
     </Card>

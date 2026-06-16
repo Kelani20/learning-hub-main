@@ -24,23 +24,26 @@ const AnalyticsPage =  async () => {
   const topCourse = [...data].sort((a, b) => b.total - a.total)[0];
 
   return (
-    <div className="min-h-full bg-slate-50 p-4 sm:p-6">
-      <section className="mb-6 rounded-md border border-slate-200 bg-white p-6 shadow-sm">
+    <div className="min-h-full bg-slate-50 p-4 dark:bg-slate-950 sm:p-6">
+      <section className="product-surface motion-rise mb-6 rounded-2xl p-6">
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
+            <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-600 dark:text-brand-400">
               Instructor analytics
             </p>
-            <h1 className="mt-2 text-3xl font-black tracking-normal text-slate-950">
+            <h1 className="mt-2 text-balance text-3xl font-black tracking-tight text-slate-950 dark:text-white">
               Revenue, enrollment, and launch readiness in one view.
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
-              Demo analytics stay populated without paid providers, while connector
-              readiness stays visible for a production handoff.
+            <p className="mt-3 max-w-2xl text-pretty text-sm leading-6 text-slate-600 dark:text-slate-300">
+              Track sales and engagement across your catalog, and see which integrations
+              are live so you always know what is connected to your workspace.
             </p>
           </div>
-          <Link href="/integrations" className="inline-flex items-center text-sm font-bold text-teal-700 hover:text-teal-900">
-            Review connector setup
+          <Link
+            href="/integrations"
+            className="inline-flex cursor-pointer items-center text-sm font-bold text-brand-600 transition-colors duration-200 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300"
+          >
+            Review integrations
             <ArrowRight className="ml-1 h-4 w-4" />
           </Link>
         </div>
@@ -67,9 +70,9 @@ const AnalyticsPage =  async () => {
         />
         <DataCard
           icon={Plug}
-          label="Ready Connectors"
+          label="Connected Integrations"
           value={connectorSummary.ready}
-          helper={`${connectorSummary.needsSetup} still need setup`}
+          helper={`${connectorSummary.needsSetup} available to connect`}
         />
       </div>
       <Chart

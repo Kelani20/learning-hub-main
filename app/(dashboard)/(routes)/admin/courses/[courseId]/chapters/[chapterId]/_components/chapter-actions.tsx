@@ -67,11 +67,16 @@ const ChapterActions = ({
         disabled={disabled || isLoading}
         variant="outline"
         size="sm"
+        className="cursor-pointer rounded-full transition-all duration-200 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {isPublished ? "Unpublish" : "Publish"}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
-        <Button size="sm" disabled={isLoading}>
+        <Button
+          size="sm"
+          disabled={isLoading}
+          className="cursor-pointer rounded-full transition-all duration-200 hover:-translate-y-0.5"
+        >
           <Trash className="h-4 w-4" />
         </Button>
       </ConfirmModal>

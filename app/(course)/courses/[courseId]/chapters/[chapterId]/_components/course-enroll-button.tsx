@@ -4,6 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { Loader2, Lock } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
@@ -44,8 +45,13 @@ export const CourseEnrollButton = ({
       onClick={onClick}
       disabled={isLoading}
       size="sm"
-      className="w-full md:w-auto"
+      className="w-full cursor-pointer gap-x-2 rounded-full bg-brand-600 px-5 text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-700 hover:shadow-lg md:w-auto"
     >
+      {isLoading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Lock className="h-4 w-4" />
+      )}
       Enroll for {price ? formatPrice(price) : "Free"}
     </Button>
   );

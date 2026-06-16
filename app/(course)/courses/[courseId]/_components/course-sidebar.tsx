@@ -52,21 +52,24 @@ export const CourseSidebar = async ({
       : null);
 
   return (
-    <div className="h-full border-r flex flex-col overflow-y-auto shadow-sm">
-      <div className="p-8 flex flex-col border-b">
-        <h1 className="font-semibold">
+    <div className="flex h-full flex-col overflow-y-auto border-r border-slate-200 bg-white/95 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-950/60">
+      <div className="flex flex-col gap-y-1 border-b border-slate-200 p-8 dark:border-slate-800">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand">
+          Course
+        </p>
+        <h1 className="text-balance text-lg font-semibold leading-snug text-slate-900 dark:text-slate-50">
           {course.title}
         </h1>
         {activePurchase && (
-          <div className="mt-10">
-            <CourseProgress 
+          <div className="mt-8">
+            <CourseProgress
               variant="success"
               value={progressCount}
             />
           </div>
         )}
       </div>
-      <div className="flex flex-col w-full">
+      <div className="flex w-full flex-col py-2">
         {course.chapters.map((chapter) => (
           <CourseSidebarItem
             key={chapter.id}

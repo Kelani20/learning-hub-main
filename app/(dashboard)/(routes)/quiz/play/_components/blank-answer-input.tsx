@@ -29,8 +29,8 @@ const BlankAnswerInput = ({
   }, [answer, keywords, setBlankAnswer]);
 
   return (
-    <div className="flex justify-start w-full mt-4">
-      <h1 className="text-xl font-semibold">
+    <div className="mt-4 flex w-full justify-start">
+      <h1 className="text-xl font-semibold leading-relaxed text-slate-800 dark:text-slate-200">
         {/* replace the blanks with input elements */}
         {answerWithBlanks.split(blank).map((part, index) => {
           return (
@@ -41,7 +41,7 @@ const BlankAnswerInput = ({
               ) : (
                 <input
                   id="user-blank-input"
-                  className="text-center border-b-2 border-black dark:border-white w-28 focus:border-2 focus:border-b-4 focus:outline-none"
+                  className="w-28 border-b-2 border-slate-300 bg-transparent text-center text-teal-600 transition-colors focus:border-teal-500 focus:outline-none dark:border-slate-600 dark:text-teal-400 dark:focus:border-teal-400"
                   type="text"
                 />
               )}

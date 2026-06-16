@@ -9,7 +9,8 @@ import { cn } from "@/lib/utils";
 const storageKey = "learning-hub-theme";
 
 function getPreferredTheme() {
-  if (typeof window === "undefined") return "light";
+  // Dark is the default experience; light is opt-in.
+  if (typeof window === "undefined") return "dark";
 
   let storedTheme: string | null = null;
 
@@ -27,7 +28,7 @@ function getPreferredTheme() {
     return "dark";
   }
 
-  return "light";
+  return "dark";
 }
 
 function applyTheme(theme: "dark" | "light") {

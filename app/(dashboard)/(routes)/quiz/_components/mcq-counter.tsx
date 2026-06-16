@@ -12,14 +12,18 @@ const MCQCounter = ({
   wrong_answers: number;
 }) => {
   return (
-    <Card className="flex flex-row items-center justify-center p-2">
-      <CheckCircle2 color="green" size={30} />
-      <span className="mx-3 text-2xl text-[green]">{correct_answers}</span>
+    <Card className="flex flex-row items-center justify-center gap-x-1 rounded-2xl border-slate-200 px-3 py-2 product-surface dark:border-slate-800">
+      <CheckCircle2 size={26} className="text-emerald-600 dark:text-emerald-400" />
+      <span className="mx-2 text-2xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+        {correct_answers}
+      </span>
 
-      <Separator orientation="vertical" />
+      <Separator orientation="vertical" className="h-7 w-px bg-slate-200 dark:bg-slate-700" />
 
-      <span className="mx-3 text-2xl text-[red]">{wrong_answers}</span>
-      <XCircle color="red" size={30} />
+      <span className="mx-2 text-2xl font-bold tabular-nums text-rose-600 dark:text-rose-400">
+        {wrong_answers}
+      </span>
+      <XCircle size={26} className="text-rose-600 dark:text-rose-400" />
     </Card>
   );
 };

@@ -8,8 +8,8 @@ interface CourseProgressProps {
 };
 
 const colorByVariant = {
-  default: "text-sky-700",
-  success: "text-emerald-700",
+  default: "text-teal-700 dark:text-teal-300",
+  success: "text-emerald-700 dark:text-emerald-400",
 };
 
 const sizeByVariant = {
@@ -30,7 +30,7 @@ export const CourseProgress = ({
         variant={variant}
       />
       <p className={cn(
-        "font-medium mt-2 text-sky-700",
+        "mt-2 font-semibold tabular-nums",
         colorByVariant[variant || "default"],
         sizeByVariant[size || "default"],
       )}>

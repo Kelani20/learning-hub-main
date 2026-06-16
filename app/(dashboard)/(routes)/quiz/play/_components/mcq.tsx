@@ -167,17 +167,17 @@ const MCQ = ({
 
   if (hasEnded) {
     return (
-      <div className="absolute flex flex-col justify-center -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-        <div className="px-4 py-2 mt-2 font-semibold text-white bg-green-500 rounded-md whitespace-nowrap">
-          You Completed in{" "}
+      <div className="absolute left-1/2 top-1/2 flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2 motion-rise">
+        <div className="whitespace-nowrap rounded-full bg-teal-600 px-5 py-2.5 font-semibold text-white shadow-glow">
+          Completed in{" "}
           {formatTimeDelta(differenceInSeconds(now, game.timeStarted))}
         </div>
         <Link
           href={`/quiz/statistics/${game.id}`}
-          className={cn(buttonVariants({ size: "lg" }), "mt-2")}
+          className={cn(buttonVariants({ size: "lg" }), "mt-3 cursor-pointer rounded-full")}
         >
-          View Statistics
-          <BarChart className="w-4 h-4 ml-2" />
+          View statistics
+          <BarChart className="ml-2 h-4 w-4" />
         </Link>
       </div>
     );
@@ -185,17 +185,17 @@ const MCQ = ({
 
   return (
     <div className="absolute -translate-x-1/2 -translate-y-1/2 md:w-[80vw] max-w-4xl w-[90vw] top-1/2 left-1/2">
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row items-start justify-between">
         <div className="flex flex-col">
           {/* topic */}
-          <p>
-            <span className="text-slate-400">Topic</span> &nbsp;
-            <span className="px-2 py-1 text-white rounded-lg bg-slate-800">
+          <p className="flex items-center gap-x-2">
+            <span className="text-sm text-slate-500 dark:text-slate-400">Topic</span>
+            <span className="rounded-full bg-teal-600 px-3 py-1 text-sm font-medium text-white">
               {game.topic}
             </span>
           </p>
-          <div className="flex self-start mt-3 text-slate-400">
-            <Timer className="mr-2" />
+          <div className="mt-3 flex items-center self-start text-slate-500 dark:text-slate-400">
+            <Timer className="mr-2 h-5 w-5" />
             {formatTimeDelta(differenceInSeconds(now, game.timeStarted))}
           </div>
         </div>
@@ -204,30 +204,30 @@ const MCQ = ({
           wrong_answers={stats.wrong_answers}
         />
       </div>
-      <Card className="w-full mt-4">
+      <Card className="mt-4 w-full rounded-2xl border-slate-200 product-surface dark:border-slate-800">
         <CardHeader className="flex flex-row items-center">
-          <CardTitle className="mr-5 text-center divide-y divide-zinc-600/50">
-            <div>{questionIndex + 1}</div>
-            <div className="text-base text-slate-400">
+          <CardTitle className="mr-5 divide-y divide-slate-300 text-center dark:divide-slate-700">
+            <div className="text-slate-900 dark:text-slate-100">{questionIndex + 1}</div>
+            <div className="text-base text-slate-400 dark:text-slate-500">
               {game.questions.length}
             </div>
           </CardTitle>
-          <CardDescription className="flex-grow text-lg">
+          <CardDescription className="flex-grow text-lg text-slate-700 dark:text-slate-300">
             {currentQuestion?.question}
           </CardDescription>
         </CardHeader>
       </Card>
-      <div className="flex flex-col items-center justify-center w-full mt-4">
+      <div className="mt-4 flex w-full flex-col items-center justify-center">
         {options.map((option, index) => {
           return (
             <Button
               key={option}
               variant={selectedChoice === index ? "default" : "outline"}
-              className="justify-start w-full py-8 mb-4"
+              className="mb-3 w-full cursor-pointer justify-start rounded-xl py-8 transition duration-200"
               onClick={() => setSelectedChoice(index)}
             >
               <div className="flex items-center justify-start">
-                <div className="p-2 px-3 mr-5 border rounded-md">
+                <div className="mr-5 rounded-md border px-3 py-2">
                   {index + 1}
                 </div>
                 <div className="text-start">{option}</div>
@@ -237,15 +237,15 @@ const MCQ = ({
         })}
         <Button
           variant="default"
-          className="mt-2"
+          className="mt-2 cursor-pointer rounded-full"
           size="lg"
           disabled={isChecking || hasEnded}
           onClick={() => {
             handleNext();
           }}
         >
-          {isChecking && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-          Next <ChevronRight className="w-4 h-4 ml-2" />
+          {isChecking && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Next <ChevronRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
     </div>

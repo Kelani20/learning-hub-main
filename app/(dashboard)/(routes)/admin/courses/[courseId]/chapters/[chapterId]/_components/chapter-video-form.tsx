@@ -44,10 +44,10 @@ export const ChapterVideoForm = ({
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+    <div className="product-muted mt-6 rounded-2xl p-4">
+      <div className="font-bold flex items-center justify-between text-slate-950 dark:text-white">
         Chapter Video
-        <Button onClick={toggleEdit} variant="ghost">
+        <Button onClick={toggleEdit} variant="ghost" className="cursor-pointer rounded-full">
           {isEditing && (
             <>Cancel</>
           )}
@@ -56,7 +56,7 @@ export const ChapterVideoForm = ({
               <PlusCircle className="h-4 w-4 mr-2" />
               Add Video
             </>
-          )} 
+          )}
           {!isEditing && initialData.videoUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
@@ -67,11 +67,11 @@ export const ChapterVideoForm = ({
       </div>
       {!isEditing && (
         !initialData.videoUrl ? (
-          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
-            <VideoIcon className="h-10 w-10 text-slate-500" />
+          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-xl dark:bg-slate-800">
+            <VideoIcon className="h-10 w-10 text-slate-500 dark:text-slate-400" />
           </div>
         ): (
-          <div className="relative aspect-video mt-2">
+          <div className="relative aspect-video mt-2 overflow-hidden rounded-xl">
             <MuxPlayer
               playbackId={initialData?.muxData?.playbackId || ""}
             />

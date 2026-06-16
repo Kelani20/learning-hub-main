@@ -60,22 +60,25 @@ const ChapterId = async ({
           label={"This chapter is not published. It will not be visible to students."}
         />
       )}
-      <div className="p-6">
+      <div className="min-h-full bg-slate-50 p-4 dark:bg-slate-950 sm:p-6">
         <div className="flex items-center justify-between">
           <div className="w-full">
             <Link
               href={`/admin/courses/${courseId}`}
-              className="flex items-center text-sm hover:opacity-75 transition mb-6"
+              className="inline-flex items-center text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors duration-200 mb-6 dark:text-slate-300 dark:hover:text-brand-400"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to course setup
             </Link>
-            <div className="flex items-center justify-between w-full">
-              <div className="flex flex-col gap-y-2"> 
-                <h1 className="text-2xl font-medium">
-                  Chapter Creation
+            <div className="product-surface motion-rise flex flex-col gap-4 rounded-2xl p-6 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-y-2">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-600 dark:text-brand-400">
+                  Chapter setup
+                </p>
+                <h1 className="text-2xl font-black tracking-tight text-slate-950 dark:text-white">
+                  Build out this chapter
                 </h1>
-                <span className="text-sm text-slate-700">
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
                   Complete all fields {completionText}
                 </span>
               </div>
@@ -88,12 +91,12 @@ const ChapterId = async ({
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           <div className="space-y-4">
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={LayoutDashboard} />
-                <h2 className="text-xl">
+                <h2 className="text-xl font-bold text-slate-950 dark:text-white">
                   Customize Chapter
                 </h2>
               </div>
@@ -111,7 +114,7 @@ const ChapterId = async ({
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={Eye} />
-                <h2 className="text-xl">
+                <h2 className="text-xl font-bold text-slate-950 dark:text-white">
                   Access Settings
                 </h2>
               </div>

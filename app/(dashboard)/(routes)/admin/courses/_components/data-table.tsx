@@ -56,23 +56,23 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 justify-between">
+      <div className="flex items-center py-4 justify-between gap-3">
         <Input
           placeholder="Filter courses..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
           }
-          className="max-w-4xl md:max-w-xs"
+          className="h-10 max-w-4xl rounded-full bg-white px-4 transition-colors duration-200 focus-visible:ring-brand-500 dark:bg-slate-900 md:max-w-xs"
         />
         <Link href="/admin/create">
-          <Button>
+          <Button className="h-10 cursor-pointer rounded-full bg-brand-500 px-5 font-bold text-white shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 hover:shadow-lg">
             <PlusCircle className="h-4 w-4 mr-2" />
             New Course
           </Button>
         </Link>
       </div>
-      <div className="rounded-md border">
+      <div className="product-surface overflow-hidden rounded-2xl">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -108,8 +108,8 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                <TableCell colSpan={columns.length} className="h-28 text-center text-sm text-slate-500 dark:text-slate-400">
+                  No courses yet. Create your first one to get started.
                 </TableCell>
               </TableRow>
             )}
@@ -122,6 +122,7 @@ export function DataTable<TData, TValue>({
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
+          className="cursor-pointer rounded-full transition-all duration-200 disabled:cursor-not-allowed"
         >
           Previous
         </Button>
@@ -130,6 +131,7 @@ export function DataTable<TData, TValue>({
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
+          className="cursor-pointer rounded-full transition-all duration-200 disabled:cursor-not-allowed"
         >
           Next
         </Button>

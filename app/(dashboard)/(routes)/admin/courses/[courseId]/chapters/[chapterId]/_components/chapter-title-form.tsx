@@ -59,10 +59,10 @@ export const ChapterTitleForm = ({
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+    <div className="product-muted mt-6 rounded-2xl p-4">
+      <div className="font-bold flex items-center justify-between text-slate-950 dark:text-white">
         Chapter Title
-        <Button onClick={toggleEdit} variant="ghost">
+        <Button onClick={toggleEdit} variant="ghost" className="cursor-pointer rounded-full">
           {isEditing ? (
             <>Cancel</>
             ): (
@@ -74,7 +74,7 @@ export const ChapterTitleForm = ({
         </Button>
       </div>
       {!isEditing && (
-        <p className="text-sm mt-2">
+        <p className="text-sm mt-2 text-slate-700 dark:text-slate-200">
           {initialData.title}
         </p>
       )}
@@ -90,9 +90,10 @@ export const ChapterTitleForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
+                    <Input
                       disabled={isSubmitting}
                       placeholder="E.g. 'Introduction to the course'"
+                      className="transition-colors duration-200 focus-visible:ring-brand-500"
                       {...field}
                     />
                   </FormControl>
@@ -103,6 +104,7 @@ export const ChapterTitleForm = ({
               <Button
                 disabled={!isValid || isSubmitting}
                 type="submit"
+                className="cursor-pointer rounded-full bg-brand-500 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Save
               </Button>

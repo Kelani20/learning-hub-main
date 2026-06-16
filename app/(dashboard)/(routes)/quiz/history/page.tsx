@@ -6,6 +6,7 @@ import { LucideLayoutDashboard } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import HistoryComponent from "./_components/history";
 
 const History = async () => {
@@ -16,25 +17,28 @@ const History = async () => {
   }
 
   return (
-    <div className="min-h-full bg-slate-50 p-4 sm:p-6">
-      <div className="mx-auto max-w-5xl space-y-5">
+    <div className="min-h-full bg-slate-50 p-4 dark:bg-slate-950 sm:p-6">
+      <div className="mx-auto max-w-5xl space-y-5 motion-rise">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
-              Practice lab
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-600 dark:text-teal-400">
+              Adaptive practice
             </p>
-            <h1 className="mt-2 text-3xl font-black tracking-normal text-slate-950">
+            <h1 className="mt-2 text-3xl font-black tracking-normal text-balance text-slate-950 dark:text-slate-50">
               Quiz history
             </h1>
           </div>
-          <Link className={buttonVariants({ variant: "outline" })} href="/quiz">
+          <Link
+            className={cn(buttonVariants({ variant: "outline" }), "cursor-pointer")}
+            href="/quiz"
+          >
             <LucideLayoutDashboard className="mr-2 h-4 w-4" />
-            Back to Dashboard
+            Back to dashboard
           </Link>
         </div>
-        <Card className="border-slate-200 bg-white shadow-sm">
-          <CardHeader className="border-b border-slate-100">
-            <CardTitle className="text-2xl font-black tracking-normal text-slate-950">
+        <Card className="rounded-2xl border-slate-200 bg-white shadow-sm product-surface dark:border-slate-800">
+          <CardHeader className="border-b border-slate-100 dark:border-slate-800">
+            <CardTitle className="text-2xl font-black tracking-normal text-slate-950 dark:text-slate-50">
               Recent attempts
             </CardTitle>
           </CardHeader>

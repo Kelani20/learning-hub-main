@@ -23,46 +23,46 @@ export const Chart = ({
   data
 }: ChartProps) => {
   return(
-    <Card className="rounded-md border-slate-200 bg-white p-5 shadow-sm">
+    <Card className="product-surface rounded-2xl p-5">
       <div className="mb-5">
-        <p className="text-sm font-bold uppercase tracking-[0.14em] text-teal-700">
+        <p className="text-sm font-black uppercase tracking-[0.14em] text-brand-600 dark:text-brand-400">
           Course revenue
         </p>
-        <h2 className="mt-1 text-xl font-black tracking-normal text-slate-950">
+        <h2 className="mt-1 text-xl font-black tracking-tight text-slate-950 dark:text-white">
           Performance by learning path
         </h2>
       </div>
       <ResponsiveContainer width="100%" height={360}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#94a3b833" />
           <XAxis
             dataKey={"name"}
-            stroke="#64748b"
+            stroke="#94a3b8"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis
-            stroke="#64748b"
+            stroke="#94a3b8"
             fontSize={12}
             tickLine={false}
             axisLine={false}
             tickFormatter={(value) => `$${value}`}
           />
           <Tooltip
-            cursor={{ fill: "#f1f5f9" }}
+            cursor={{ fill: "#14b8a614" }}
             formatter={(value) => [`$${value}`, "Revenue"]}
             contentStyle={{
-              borderRadius: 8,
-              borderColor: "#e2e8f0",
-              boxShadow: "0 10px 30px rgba(15, 23, 42, 0.12)",
+              borderRadius: 12,
+              borderColor: "#14b8a633",
+              boxShadow: "0 10px 30px rgba(15, 23, 42, 0.18)",
               fontSize: 12,
             }}
           />
-          <Bar 
+          <Bar
             dataKey={"total"}
-            fill="#0f172a"
-            radius={[4, 4, 0, 0]}
+            fill="#14b8a6"
+            radius={[6, 6, 0, 0]}
           />
         </BarChart>
       </ResponsiveContainer>

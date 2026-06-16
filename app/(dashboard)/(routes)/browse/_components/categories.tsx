@@ -29,7 +29,7 @@ const iconMap: Record<string, LucideIcon> = {
 
 export const Categories = ({ items }: CategoriesProps) => {
   return (
-    <div className="flex items-center gap-x-2 overflow-x-auto pb-2">
+    <div className="flex items-center gap-x-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {items.map((item) => (
         <CategoryItem
           key={item.id}

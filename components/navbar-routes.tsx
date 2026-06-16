@@ -20,7 +20,7 @@ const NavbarRoutes = () => {
     <>
       {isBrowsePage && (
         <div className="hidden md:block">
-          <Suspense fallback={<div className="ml-8 h-10 w-[320px] rounded-full bg-slate-100" />}>
+          <Suspense fallback={<div className="skeleton ml-8 h-10 w-[320px] rounded-full" />}>
             <SearchInput />
           </Suspense>
         </div>
@@ -33,7 +33,7 @@ const NavbarRoutes = () => {
               size="sm"
               variant="ghost"
               aria-label="Exit to dashboard"
-              className="h-10 w-10 rounded-full px-0 sm:w-auto sm:rounded-md sm:px-3"
+              className="h-10 w-10 cursor-pointer rounded-full px-0 font-semibold transition hover:text-teal-600 dark:hover:text-teal-300 sm:w-auto sm:rounded-full sm:px-3"
             >
               <LogOut className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">Exit</span>
@@ -45,7 +45,7 @@ const NavbarRoutes = () => {
               size="sm"
               variant="ghost"
               aria-label="Open instructor view"
-              className="h-10 w-10 rounded-full px-0 sm:w-auto sm:rounded-md sm:px-3"
+              className="h-10 w-10 cursor-pointer rounded-full px-0 font-semibold transition hover:text-teal-600 dark:hover:text-teal-300 sm:w-auto sm:rounded-full sm:px-3"
             >
               <ShieldCheck className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">Instructor View</span>

@@ -21,14 +21,26 @@ describe("ThemeToggle", () => {
     document.documentElement.style.colorScheme = "";
   });
 
-  it("toggles dark mode and persists the selected theme", () => {
+  it("defaults to dark, then toggles and persists the selected theme", () => {
     const { getByRole } = render(<ThemeToggle />);
 
+    // Dark is the default experience after mount.
+    expect(document.documentElement.classList.contains("dark")).toBe(true);
+
     const toggle = getByRole("button", { name: "Toggle color theme" });
+
+    // First click switches to light and persists the choice.
     act(() => {
       toggle.click();
     });
+    expect(document.documentElement.classList.contains("dark")).toBe(false);
+    expect(document.documentElement.style.colorScheme).toBe("light");
+    expect(window.localStorage.getItem("learning-hub-theme")).toBe("light");
 
+    // Second click switches back to dark and persists.
+    act(() => {
+      toggle.click();
+    });
     expect(document.documentElement.classList.contains("dark")).toBe(true);
     expect(document.documentElement.style.colorScheme).toBe("dark");
     expect(window.localStorage.getItem("learning-hub-theme")).toBe("dark");

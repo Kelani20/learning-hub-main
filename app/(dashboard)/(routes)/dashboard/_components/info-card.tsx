@@ -16,16 +16,16 @@ export const InfoCard = ({
   numberOfItems,
 }: InfoCardProps) => {
   return (
-    <div className="product-surface flex items-center gap-x-4 rounded-md p-4">
+    <div className="product-surface flex items-center gap-x-4 rounded-2xl p-4 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg">
       <IconBadge
         variant={variant}
         icon={Icon}
       />
       <div>
-        <p className="font-bold text-slate-950">
+        <p className="font-bold text-slate-950 dark:text-white">
           {label}
         </p>
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-400">
           {numberOfItems} {numberOfItems === 1 ? "Course" : "Courses"}
         </p>
       </div>

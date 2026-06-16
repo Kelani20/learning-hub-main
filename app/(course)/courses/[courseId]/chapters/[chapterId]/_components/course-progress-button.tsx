@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useConfettiStore } from "@/hooks/use-confetti-store";
 import axios from "axios";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, Loader2, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -58,10 +58,14 @@ const CourseProgressButton = ({
       onClick={onClick}
       disabled={isLoading}
       variant={isCompleted ? "outline" : "success"}
-      className="w-full md:w-auto"
+      className="w-full cursor-pointer gap-x-2 rounded-full px-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg md:w-auto"
     >
-      {isCompleted ? "Not Completed" : "Mark as completed"}
-      <Icon className="h-4 w-4 ml-2" />
+      {isCompleted ? "Mark as not completed" : "Mark as completed"}
+      {isLoading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Icon className="h-4 w-4" />
+      )}
     </Button>
   );
 }

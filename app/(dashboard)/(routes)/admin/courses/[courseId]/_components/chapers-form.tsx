@@ -85,21 +85,21 @@ export const ChaptersForm = ({
   };
 
   return (
-    <div className="relative mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="product-muted relative mt-6 rounded-2xl p-4">
       {isUpdating && (
-        <div className="absolute h-full w-full top-0 right-0 bg-slate-500/20 flex items-center justify-center rounded-md">
-          <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
+        <div className="absolute h-full w-full top-0 right-0 bg-slate-500/20 flex items-center justify-center rounded-2xl">
+          <Loader2 className="animate-spin h-6 w-6 text-brand-600 dark:text-brand-400" />
         </div>
       )}
-      <div className="font-medium flex items-center justify-between">
+      <div className="font-bold flex items-center justify-between text-slate-950 dark:text-white">
         Course Chapters
-        <Button onClick={toggleCreating} variant="ghost">
+        <Button onClick={toggleCreating} variant="ghost" className="cursor-pointer rounded-full">
           {isCreating ? (
             <>Cancel</>
             ): (
               <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Add a chaper
+              Add a chapter
             </>
           )}
         </Button>
@@ -116,9 +116,10 @@ export const ChaptersForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
+                    <Input
                       disabled={isSubmitting}
                       placeholder="E.g. 'Introduction to the course'"
+                      className="transition-colors duration-200 focus-visible:ring-brand-500"
                       {...field}
                     />
                   </FormControl>
@@ -128,6 +129,7 @@ export const ChaptersForm = ({
               <Button
                 disabled={!isValid || isSubmitting}
                 type="submit"
+                className="cursor-pointer rounded-full bg-brand-500 font-bold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 Create
               </Button>
@@ -136,8 +138,8 @@ export const ChaptersForm = ({
       )}
       {!isCreating && (
         <div className={cn(
-          "text-sm mt-2",
-          !initialData.chapters.length && "text-slate-500 italic",
+          "text-sm mt-2 text-slate-700 dark:text-slate-200",
+          !initialData.chapters.length && "text-slate-500 italic dark:text-slate-400",
         )}>
           {!initialData.chapters.length && "No chapters yet."}
           <ChaptersList
@@ -148,7 +150,7 @@ export const ChaptersForm = ({
         </div>
       )}
       {!isCreating && (
-        <p className="mt-r text-xs text-muted-foreground">
+        <p className="mt-4 text-xs text-muted-foreground">
           Drag and drop to reorder chapters
         </p>
       )}

@@ -103,14 +103,14 @@ const QuizCreation = ({ topic: topicParam }: { topic: string }) => {
   }
 
   return (
-    <div className="flex min-h-full items-center justify-center bg-slate-50 p-4 sm:p-6">
-      <Card className="w-full max-w-2xl border-slate-200 bg-white shadow-sm">
-        <CardHeader className="border-b border-slate-100">
-          <CardTitle className="text-2xl font-black tracking-normal text-slate-950">
+    <div className="flex min-h-full items-center justify-center bg-slate-50 p-4 dark:bg-slate-950 sm:p-6">
+      <Card className="w-full max-w-2xl rounded-2xl border-slate-200 bg-white shadow-sm product-surface motion-rise dark:border-slate-800">
+        <CardHeader className="border-b border-slate-100 dark:border-slate-800">
+          <CardTitle className="text-2xl font-black tracking-normal text-balance text-slate-950 dark:text-slate-50">
             Create a practice quiz
           </CardTitle>
-          <CardDescription className="text-slate-600">
-            Choose a topic, question count, and format.
+          <CardDescription className="text-slate-600 dark:text-slate-400">
+            Choose a topic, question count, and format. Your quiz is ready in seconds.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -154,25 +154,25 @@ const QuizCreation = ({ topic: topicParam }: { topic: string }) => {
                       />
                     </FormControl>
                     <FormDescription>
-                      Demo mode supports up to 10 generated local questions.
+                      Generate between 1 and 10 questions per quiz.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <div className="grid grid-cols-2 rounded-md border border-slate-200 bg-slate-50 p-1">
+              <div className="grid grid-cols-2 gap-1 rounded-xl border border-slate-200 bg-slate-50 p-1 dark:border-slate-800 dark:bg-slate-900">
                 <Button
                   variant={
                     form.getValues("type") === "mcq" ? "default" : "secondary"
                   }
-                  className="rounded-sm"
+                  className="cursor-pointer rounded-lg"
                   onClick={() => {
                     form.setValue("type", "mcq", { shouldValidate: true });
                   }}
                   type="button"
                 >
-                  <CopyCheck className="w-4 h-4 mr-2" /> Multiple Choice
+                  <CopyCheck className="mr-2 h-4 w-4" /> Multiple choice
                 </Button>
                 <Button
                   variant={
@@ -180,25 +180,29 @@ const QuizCreation = ({ topic: topicParam }: { topic: string }) => {
                       ? "default"
                       : "secondary"
                   }
-                  className="rounded-sm"
+                  className="cursor-pointer rounded-lg"
                   onClick={() =>
                     form.setValue("type", "open_ended", { shouldValidate: true })
                   }
                   type="button"
                 >
-                  <BookOpen className="w-4 h-4 mr-2" /> Open Ended
+                  <BookOpen className="mr-2 h-4 w-4" /> Open ended
                 </Button>
               </div>
               <div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-end">
                 <Link href="/quiz">
-                  <Button type="button" variant="ghost" className="w-full sm:w-auto">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full cursor-pointer sm:w-auto"
+                  >
                     Cancel
                   </Button>
                 </Link>
                 <Button
                   type="submit"
                   disabled={!isValid || isSubmitting || isPending}
-                  className="w-full sm:w-auto"
+                  className="w-full cursor-pointer rounded-full sm:w-auto"
                 >
                   Continue
                 </Button>

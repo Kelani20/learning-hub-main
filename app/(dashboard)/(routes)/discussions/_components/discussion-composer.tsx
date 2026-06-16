@@ -36,15 +36,19 @@ export function DiscussionComposer() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4 shadow-sm md:flex-row">
+    <form onSubmit={onSubmit} className="product-surface flex flex-col gap-3 rounded-2xl p-4 md:flex-row md:items-center">
       <Input
         value={title}
         onChange={(event) => setTitle(event.target.value)}
-        className="h-11 rounded-full border-slate-200 bg-slate-50 px-4 shadow-none"
+        className="h-11 rounded-full border-slate-200 bg-slate-50 px-4 shadow-none transition-colors duration-200 focus-visible:ring-brand-500 dark:border-slate-700 dark:bg-slate-950"
         placeholder="Ask a question about a course or topic"
       />
-      <Button type="submit" disabled={isPosting} className="h-11 rounded-full bg-slate-950 px-6 font-bold text-white hover:bg-slate-800">
-        Post
+      <Button
+        type="submit"
+        disabled={isPosting}
+        className="h-11 cursor-pointer rounded-full bg-brand-500 px-6 font-bold text-white shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {isPosting ? "Posting…" : "Post"}
       </Button>
     </form>
   );

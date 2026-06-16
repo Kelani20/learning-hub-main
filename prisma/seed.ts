@@ -37,6 +37,8 @@ async function main() {
   const categories = await seedCategories();
   const aiCategory = categories.find((category) => category.name === "AI");
   const productCategory = categories.find((category) => category.name === "Product");
+  const frontendCategory = categories.find((category) => category.name === "Frontend");
+  const backendCategory = categories.find((category) => category.name === "Backend");
 
   const aiCourse = await db.course.create({
     data: {
@@ -109,6 +111,172 @@ async function main() {
             position: 1,
             isPublished: true,
             isFree: true,
+          },
+        ],
+      },
+    },
+  });
+
+  await db.course.create({
+    data: {
+      id: "course_frontend_systems",
+      userId: "demo_instructor",
+      title: "Frontend Systems That Scale",
+      description:
+        "Design reusable UI patterns, data loading boundaries, and resilient app surfaces.",
+      imageUrl:
+        "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1600&auto=format&fit=crop",
+      price: 29,
+      isPublished: true,
+      categoryId: frontendCategory?.id,
+      chapters: {
+        create: [
+          {
+            id: "chapter_design_system_boundaries",
+            title: "Design system boundaries",
+            description:
+              "<p>Learn how to keep components reusable without hiding product-specific decisions.</p>",
+            videoUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
+            position: 1,
+            isPublished: true,
+            isFree: true,
+          },
+        ],
+      },
+    },
+  });
+
+  await db.course.create({
+    data: {
+      id: "course_backend_apis",
+      userId: "demo_instructor",
+      title: "Backend APIs in Production",
+      description:
+        "Design dependable REST and webhook APIs with clear contracts, pagination, idempotency, and graceful error handling.",
+      imageUrl:
+        "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1600&auto=format&fit=crop",
+      price: 39,
+      isPublished: true,
+      categoryId: backendCategory?.id,
+      chapters: {
+        create: [
+          {
+            id: "chapter_api_contracts",
+            title: "Designing clear API contracts",
+            description:
+              "<p>Model resources, status codes, and error shapes so clients can integrate confidently and predictably.</p>",
+            videoUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
+            position: 1,
+            isPublished: true,
+            isFree: true,
+          },
+          {
+            id: "chapter_idempotency_pagination",
+            title: "Idempotency and pagination",
+            description:
+              "<p>Make write endpoints safe to retry and read endpoints scalable with cursor-based pagination.</p>",
+            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            position: 2,
+            isPublished: true,
+            isFree: false,
+          },
+          {
+            id: "chapter_webhooks_resilience",
+            title: "Webhooks and resilience",
+            description:
+              "<p>Verify signatures, handle retries, and design outbound webhooks that survive downstream failures.</p>",
+            videoUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
+            position: 3,
+            isPublished: true,
+            isFree: false,
+          },
+        ],
+      },
+    },
+  });
+
+  await db.course.create({
+    data: {
+      id: "course_typescript_deep_dive",
+      userId: "demo_instructor",
+      title: "TypeScript Deep Dive",
+      description:
+        "Move beyond basics with generics, narrowing, and utility types that make large codebases safer to refactor.",
+      imageUrl:
+        "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1600&auto=format&fit=crop",
+      price: 0,
+      isPublished: true,
+      categoryId: frontendCategory?.id,
+      chapters: {
+        create: [
+          {
+            id: "chapter_ts_generics",
+            title: "Generics that pay off",
+            description:
+              "<p>Write reusable, type-safe functions and components without leaking complexity to callers.</p>",
+            videoUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
+            position: 1,
+            isPublished: true,
+            isFree: true,
+          },
+          {
+            id: "chapter_ts_narrowing",
+            title: "Narrowing and control flow",
+            description:
+              "<p>Use discriminated unions and type guards to let the compiler rule out impossible states.</p>",
+            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            position: 2,
+            isPublished: true,
+            isFree: true,
+          },
+          {
+            id: "chapter_ts_utility_types",
+            title: "Utility types in practice",
+            description:
+              "<p>Compose Pick, Omit, and mapped types to refactor large codebases with confidence.</p>",
+            videoUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
+            position: 3,
+            isPublished: true,
+            isFree: false,
+          },
+        ],
+      },
+    },
+  });
+
+  await db.course.create({
+    data: {
+      id: "course_data_storytelling",
+      userId: "demo_instructor",
+      title: "Data Storytelling for Teams",
+      description:
+        "Turn dashboards into decisions with clear narratives, honest visualizations, and metrics your team actually trusts.",
+      imageUrl:
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1600&auto=format&fit=crop",
+      price: 59,
+      isPublished: true,
+      categoryId: productCategory?.id,
+      chapters: {
+        create: [
+          {
+            id: "chapter_data_narratives",
+            title: "From dashboards to decisions",
+            description:
+              "<p>Frame a metric inside a clear question so stakeholders know what action it should drive.</p>",
+            videoUrl: "https://www.youtube.com/embed/jNQXAC9IVRw",
+            position: 1,
+            isPublished: true,
+            isFree: true,
+          },
+          {
+            id: "chapter_honest_visuals",
+            title: "Honest visualizations",
+            description:
+              "<p>Choose chart types and scales that tell the truth and earn long-term trust from your team.</p>",
+            videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+            position: 2,
+            isPublished: true,
+            isFree: false,
           },
         ],
       },

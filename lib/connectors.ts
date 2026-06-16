@@ -64,7 +64,7 @@ const providerConnector = ({
   action,
   requiredEnv,
   status: configured ? "configured" : "needs_setup",
-  statusLabel: configured ? "Configured" : "Needs setup",
+  statusLabel: configured ? "Connected" : "Available",
 });
 
 const optionalConnectors: OptionalConnectorDefinition[] = [
@@ -78,8 +78,8 @@ const optionalConnectors: OptionalConnectorDefinition[] = [
     requiredEnv: ["UPLOADTHING_APP_ID", "UPLOADTHING_SECRET"],
     signal: "Course media pipeline",
     action: "Add UploadThing keys for production uploads",
-    configuredLabel: "Configured",
-    setupLabel: "Ready to wire",
+    configuredLabel: "Connected",
+    setupLabel: "Available",
   },
   {
     id: "github",
@@ -91,8 +91,8 @@ const optionalConnectors: OptionalConnectorDefinition[] = [
     requiredEnv: ["GITHUB_CLIENT_ID"],
     signal: "Developer-course imports",
     action: "Add OAuth app details before enabling repo imports",
-    configuredLabel: "Configured",
-    setupLabel: "Blueprint",
+    configuredLabel: "Connected",
+    setupLabel: "Available",
   },
   {
     id: "notion",
@@ -104,8 +104,8 @@ const optionalConnectors: OptionalConnectorDefinition[] = [
     requiredEnv: ["NOTION_API_KEY"],
     signal: "Team knowledge imports",
     action: "Add a Notion integration secret",
-    configuredLabel: "Configured",
-    setupLabel: "Blueprint",
+    configuredLabel: "Connected",
+    setupLabel: "Available",
   },
   {
     id: "google-drive",
@@ -117,8 +117,8 @@ const optionalConnectors: OptionalConnectorDefinition[] = [
     requiredEnv: ["GOOGLE_CLIENT_ID"],
     signal: "Document resource sync",
     action: "Add Google OAuth client settings",
-    configuredLabel: "Configured",
-    setupLabel: "Blueprint",
+    configuredLabel: "Connected",
+    setupLabel: "Available",
   },
   {
     id: "slack",
@@ -130,8 +130,8 @@ const optionalConnectors: OptionalConnectorDefinition[] = [
     requiredEnv: ["SLACK_BOT_TOKEN"],
     signal: "Learner engagement",
     action: "Add a Slack bot token",
-    configuredLabel: "Configured",
-    setupLabel: "Blueprint",
+    configuredLabel: "Connected",
+    setupLabel: "Available",
   },
   {
     id: "webhooks",
@@ -143,8 +143,8 @@ const optionalConnectors: OptionalConnectorDefinition[] = [
     requiredEnv: ["WEBHOOK_SIGNING_SECRET"],
     signal: "Automation events",
     action: "Add a signing secret",
-    configuredLabel: "Configured",
-    setupLabel: "Blueprint",
+    configuredLabel: "Connected",
+    setupLabel: "Available",
   },
   {
     id: "posthog",
@@ -156,8 +156,8 @@ const optionalConnectors: OptionalConnectorDefinition[] = [
     requiredEnv: ["NEXT_PUBLIC_POSTHOG_KEY"],
     signal: "Usage instrumentation",
     action: "Add the public project key",
-    configuredLabel: "Configured",
-    setupLabel: "Ready to wire",
+    configuredLabel: "Connected",
+    setupLabel: "Available",
   },
   {
     id: "sentry",
@@ -169,8 +169,8 @@ const optionalConnectors: OptionalConnectorDefinition[] = [
     requiredEnv: ["SENTRY_DSN"],
     signal: "Runtime observability",
     action: "Add a Sentry DSN",
-    configuredLabel: "Configured",
-    setupLabel: "Ready to wire",
+    configuredLabel: "Connected",
+    setupLabel: "Available",
   },
 ];
 
@@ -210,10 +210,10 @@ export function getConnectorCatalog(): Connector[] {
       status: capability.status === "needs_keys" ? "needs_setup" : "configured",
       statusLabel:
         capability.status === "ready"
-          ? "Configured"
+          ? "Connected"
           : capability.status === "public_only"
             ? "Public keys"
-            : "Needs setup",
+            : "Available",
     })
   );
 
@@ -270,7 +270,7 @@ export function getConnectorCatalog(): Connector[] {
       description:
         "Role switching keeps learner and instructor journeys available without private accounts.",
       status: "live",
-      statusLabel: "Live in demo",
+      statusLabel: "Live",
       requiredEnv: ["DEMO_USER_ID", "DEMO_ADMIN_ID"],
       signal: "Learner and instructor personas",
       action: "Replace with a production auth provider for private deployments",
@@ -286,7 +286,7 @@ export function getConnectorCatalog(): Connector[] {
       description:
         "Deterministic topic quizzes work without paid AI keys and stay testable in CI.",
       status: "live",
-      statusLabel: "Live in demo",
+      statusLabel: "Live",
       requiredEnv: ["QUIZ_PROVIDER"],
       signal: "Saved practice attempts",
       action: "Add an AI provider later without breaking the local fallback",
@@ -299,7 +299,7 @@ export function getConnectorCatalog(): Connector[] {
       description:
         "Course discussions are backed by app data instead of a paid chat dependency.",
       status: "live",
-      statusLabel: "Live in demo",
+      statusLabel: "Live",
       requiredEnv: ["DISCUSSION_PROVIDER"],
       signal: "Course-specific community",
       action: "Add moderation workflows before high-volume launch",

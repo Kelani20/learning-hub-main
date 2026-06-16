@@ -44,10 +44,10 @@ export const ImageForm = ({
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+    <div className="product-muted mt-6 rounded-2xl p-4">
+      <div className="font-bold flex items-center justify-between text-slate-950 dark:text-white">
         Course Image
-        <Button onClick={toggleEdit} variant="ghost">
+        <Button onClick={toggleEdit} variant="ghost" className="cursor-pointer rounded-full">
           {isEditing && (
             <>Cancel</>
           )}
@@ -56,7 +56,7 @@ export const ImageForm = ({
               <PlusCircle className="h-4 w-4 mr-2" />
               Add image
             </>
-          )} 
+          )}
           {!isEditing && initialData.imageUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
@@ -67,15 +67,15 @@ export const ImageForm = ({
       </div>
       {!isEditing && (
         !initialData.imageUrl ? (
-          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-md">
-            <ImageIcon className="h-10 w-10 text-slate-500" />
+          <div className="flex items-center justify-center h-60 bg-slate-200 rounded-xl dark:bg-slate-800">
+            <ImageIcon className="h-10 w-10 text-slate-500 dark:text-slate-400" />
           </div>
         ): (
           <div className="relative aspect-video mt-2">
             <Image
               alt="Upload"
               fill
-              className="object-cover rounded-md"
+              className="object-cover rounded-xl"
               src={initialData.imageUrl}
             />
           </div>

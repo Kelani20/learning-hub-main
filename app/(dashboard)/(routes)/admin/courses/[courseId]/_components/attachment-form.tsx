@@ -57,10 +57,10 @@ export const AttachmentForm = ({
   };
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
-      <div className="font-medium flex items-center justify-between">
+    <div className="product-muted mt-6 rounded-2xl p-4">
+      <div className="font-bold flex items-center justify-between text-slate-950 dark:text-white">
         Course Attachment
-        <Button onClick={toggleEdit} variant="ghost">
+        <Button onClick={toggleEdit} variant="ghost" className="cursor-pointer rounded-full">
           {isEditing && (
             <>Cancel</>
           )}
@@ -75,7 +75,7 @@ export const AttachmentForm = ({
       {!isEditing && (
         <>
           {initialData.attachments.length === 0 && (
-            <p className="text-sm text-slate-500 mt-2 italic">
+            <p className="text-sm text-slate-500 mt-2 italic dark:text-slate-400">
               No attachments
             </p>
           )}
@@ -84,7 +84,7 @@ export const AttachmentForm = ({
               {initialData.attachments.map((attachment) => (
                 <div
                   key={attachment.id}
-                  className="flex items-center p-3 w-full bg-sky-100 border-sky-200 border text-sky-700 rounded-md"
+                  className="flex items-center p-3 w-full border border-brand-500/20 bg-brand-500/10 text-brand-700 rounded-xl dark:text-brand-200"
                 >
                   <File className="w-4 h-4 mr-2 flex-shrink-0" />
                   <p className="text-xs line-clamp-1">
@@ -94,8 +94,8 @@ export const AttachmentForm = ({
                     <Loader2 className="h-4 w-4 animate-spin" />
                   )}
                   {deletingId !== attachment.id && (
-                    <Button 
-                      className="ml-auto hover:opacity-75 transition"
+                    <Button
+                      className="ml-auto cursor-pointer hover:opacity-75 transition"
                       onClick={() => onDelete(attachment.id)}
                       >
                       <X className="h-4 w-4" />

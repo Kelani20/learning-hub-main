@@ -77,15 +77,15 @@ const ChaptersList = ({
             >
               {(provided) => (
                 <div className={cn(
-                  "flex items-center gap-x-2 bg-slate-200 border-slate-200 text-slate-700 rounded-md border mb-4 text-sm",
-                  chapter.isPublished && "bg-sky-100 border-sky-200 text-sky-700",
+                  "flex items-center gap-x-2 bg-slate-200 border-slate-200 text-slate-700 rounded-xl border mb-3 text-sm transition-colors duration-200 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200",
+                  chapter.isPublished && "bg-brand-500/10 border-brand-500/20 text-brand-700 dark:bg-brand-500/15 dark:border-brand-500/25 dark:text-brand-200",
                   )}
                   ref={provided.innerRef}
                   {...provided.draggableProps}
                 >
                   <div className={cn(
-                    "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-md transition",
-                    chapter.isPublished && "border-r-sky-200 hover:bg-sky-200",
+                    "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-l-xl transition cursor-grab active:cursor-grabbing dark:border-r-slate-700 dark:hover:bg-slate-700",
+                    chapter.isPublished && "border-r-brand-500/20 hover:bg-brand-500/15",
                     )}
                     {...provided.dragHandleProps}
                   >
@@ -94,19 +94,19 @@ const ChaptersList = ({
                   {chapter.title}
                   <div className="ml-auto pr-2 flex items-center gap-x-2">
                     {chapter.isFree && (
-                      <Badge>
+                      <Badge className="rounded-full">
                         Free
                       </Badge>
                     )}
                     <Badge
                       className={cn(
-                        "bg-slate-500",
-                        chapter.isPublished && "bg-sky-700",
+                        "rounded-full bg-slate-500 hover:bg-slate-500",
+                        chapter.isPublished && "bg-brand-600 hover:bg-brand-600",
                       )}
                     >
                       {chapter.isPublished ? "Published" : "Draft"}
                     </Badge>
-                    <Pencil 
+                    <Pencil
                       onClick={() => onEdit(chapter.id)}
                       className="w-4 h-4 cursor-pointer hover:opacity-75 transition"
                     />

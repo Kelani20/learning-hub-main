@@ -1,31 +1,31 @@
 # Learning Hub
 
-Learning Hub is a portfolio-ready course platform rebuilt around a free, demo-first workflow. Reviewers can sign in as a learner or instructor, browse courses, complete a fake payment flow, watch embedded lessons, complete quizzes, switch into instructor mode, and use database-backed discussions without needing paid API keys.
+A modern, full-stack learning management platform where teams browse courses, learn through video lessons and adaptive practice, discuss what they're learning, and ship their own course content from a polished instructor studio.
 
-## What Works
+## Features
 
-- Demo authentication with learner and instructor roles
-- Demo sign-in and sign-up pages that route into protected learner or instructor workspaces
-- Course catalog with category filters, search, progress, enrollment, and paid-course fake checkout
-- Instructor course builder with chapters, publishing, uploads, and ordering
-- URL-based lesson playback by default, with optional Mux support
-- Local quiz generation with saved attempts, topic counts, and history
-- Database-backed discussion threads and messages
-- Integration hub that shows live demo providers, Supabase capabilities, optional production services, required env keys, and connector roadmap items
-- Persistent dark mode with responsive learner, instructor, catalog, analytics, and connector surfaces
-- SVG app icon for browser tabs
-- Baseline security headers plus closed demo-mode Stripe webhook behavior
-- PostgreSQL Prisma schema with deterministic seed data
-- Vitest coverage for formatting, enrollment, video URLs, quizzes, progress, and discussions
+- **Course catalog** — search, category filters, progress tracking, enrollment, and secure checkout for paid courses
+- **Adaptive practice** — generate quizzes on any topic, save attempts, and review your history and topic mastery over time
+- **Discussions** — threaded conversations per course so learners and instructors can trade questions and answers
+- **Instructor studio** — build courses with chapters, attachments, drag-to-reorder, uploads, and one-click publishing
+- **Analytics** — track enrollment, revenue, and course performance from a dedicated dashboard
+- **Integrations** — a connector hub showing everything Learning Hub connects to, from auth and video to payments, storage, and observability
+- **Video lessons** — embedded URL playback by default, with optional Mux streaming
+- **Dark mode** — a refined dark-first interface with full responsive support across every surface
+- **Roles** — switch between learner and instructor experiences from the navbar
 
-## Stack
+## Tech Stack
 
-- Next.js 15, React 18, TypeScript, Tailwind CSS
-- Prisma 5 with PostgreSQL
-- Vitest and Testing Library
-- UploadThing for optional uploads
-- Supabase JS for optional auth, Postgres, storage, realtime, edge functions, vector search, and observability paths
-- Stripe and Mux are optional production integrations, disabled in demo mode
+- **Framework** — Next.js 15 (App Router), React 18, TypeScript
+- **Styling** — Tailwind CSS with a teal-accented design system
+- **Database** — Prisma 5 with PostgreSQL
+- **Testing** — Vitest and Testing Library
+- **Uploads** — UploadThing
+- **Optional integrations** — Stripe (payments), Mux (video), Supabase (auth, Postgres, storage, realtime, edge functions, vector search), PostHog, and Sentry
+
+## Screenshots
+
+> _Add screenshots or a short walkthrough GIF here (catalog, lesson player, instructor studio, analytics)._
 
 ## Quick Start
 
@@ -41,12 +41,13 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-## Demo Mode
+The seed creates a full catalog across Frontend, Backend, AI, and Product categories — including free and paid courses, published chapters, progress, discussions, and saved practice attempts — so you can explore the platform end to end immediately. Seed data is deterministic, so you can reset state at any time with `npm run db:seed`.
 
-The default `.env.example` is configured for a fully local showcase:
+## Configuration
+
+Learning Hub reads provider settings from environment variables, so you can swap implementations without touching UI code:
 
 ```env
-NEXT_PUBLIC_DEMO_MODE="true"
 AUTH_PROVIDER="demo"
 VIDEO_PROVIDER="url"
 PAYMENT_PROVIDER="demo"
@@ -54,62 +55,28 @@ QUIZ_PROVIDER="local"
 DISCUSSION_PROVIDER="database"
 ```
 
-Use the role switcher in the navbar to move between:
+- Enable Stripe with `STRIPE_API_KEY` and `STRIPE_WEBHOOK_SECRET`.
+- Enable Mux streaming with `MUX_TOKEN_ID` and `MUX_TOKEN_SECRET`.
+- Add Supabase with `NEXT_PUBLIC_SUPABASE_URL` and a public key (`NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`); keep `SUPABASE_SERVICE_ROLE_KEY` in server-side secrets only.
+- Visit `/integrations` to see which connectors are active and which become available as you add keys.
 
-- `Demo Learner`: browse, enroll, watch, complete chapters, quiz, discuss
-- `Demo Instructor`: create and manage courses from `/admin/courses`
+Every public response ships with baseline security headers: frame denial, content-type sniffing protection, strict-origin referrers, and locked camera, microphone, and geolocation permissions. Never commit real secret keys.
 
-Paid seeded courses open `/checkout/[courseId]`, which simulates a card checkout and then calls the same enrollment API. It is intentionally fake: no real card is charged.
-
-## Useful Scripts
-
-```bash
-npm run lint
-npm run typecheck
-npm run test
-npm run build
-npm run verify
-npm audit --audit-level=high
-```
-
-`npm audit --audit-level=high` is the security gate for this demo. The dependency tree has no high or critical advisories after modernization; npm may still report a moderate nested PostCSS advisory inside the current Next package line.
-
-## Production Notes
-
-The app is designed to be usable as-is for a portfolio demo and easy to harden further:
-
-- Keep demo auth for public portfolio deployments, or replace `lib/auth.ts` with a real provider.
-- Keep `PAYMENT_PROVIDER=demo` for frictionless review, or enable Stripe with `STRIPE_API_KEY` and `STRIPE_WEBHOOK_SECRET`.
-- Keep `VIDEO_PROVIDER=url` for free embedded video, or enable Mux with `MUX_TOKEN_ID` and `MUX_TOKEN_SECRET`.
-- Add Supabase public keys with `NEXT_PUBLIC_SUPABASE_URL` and either `NEXT_PUBLIC_SUPABASE_ANON_KEY` or `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Keep `SUPABASE_SERVICE_ROLE_KEY` only in server/deployment secrets.
-- Use `/integrations` to review connector readiness for Supabase, uploads, GitHub, Notion, Google Drive, Slack, webhooks, PostHog, and Sentry.
-- Public responses include baseline security headers: frame denial, content-type sniffing protection, strict origin referrers, and locked camera/microphone/geolocation permissions.
-- Stripe webhooks return `404` in demo mode and only initialize Stripe when `PAYMENT_PROVIDER=stripe`.
-- Seed data is deterministic, so demos can be reset with `npm run db:seed`.
-
-Do not commit real secret keys. If live service-role or secret keys were shared outside a secure secret manager, rotate them before a public deployment.
-
-## Connector Hub
-
-The `/integrations` route is an operator-facing map of what is usable now and what can be configured next:
-
-- Live demo providers: demo auth, URL video, demo enrollment, local quiz generation, and database discussions
-- Supabase upgrade paths: Auth, Postgres, Storage, Realtime, Edge Functions, Vector Search, and observability
-- Optional production providers: Stripe, Mux, UploadThing, PostHog, and Sentry
-- Connector roadmap: GitHub, Notion, Google Drive, Slack, and signed outbound webhooks
-
-The page reads environment variables directly, so adding optional keys changes connector status without changing UI code.
-
-## Health Check
-
-Before sharing the project, run:
+## Scripts
 
 ```bash
-npm run lint
-npm run typecheck
-npm run test
-npm run build
-npm audit --audit-level=high
+npm run dev        # start the dev server
+npm run build      # production build
+npm run lint       # lint the codebase
+npm run typecheck  # TypeScript type checking
+npm run test       # run the Vitest suite
+npm run verify     # lint, typecheck, test, and build
 ```
 
-These checks cover code quality, TypeScript safety, core behavior tests, production build viability, and high-severity dependency posture.
+## Built by Usama Kelani
+
+Designed and built by **Usama Kelani**.
+
+- Portfolio: [usamakelani.com](https://usamakelani.com)
+- LinkedIn: [linkedin.com/in/usamakelani](https://linkedin.com/in/usamakelani)
+- GitHub: [github.com/Kelani20](https://github.com/Kelani20)

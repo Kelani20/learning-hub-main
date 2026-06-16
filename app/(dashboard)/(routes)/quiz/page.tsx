@@ -14,25 +14,25 @@ const QuizPage = async () => {
   }
   
   return (
-    <div className="min-h-full bg-slate-50">
+    <div className="min-h-full bg-slate-50 dark:bg-slate-950">
       <main className="mx-auto max-w-7xl p-4 sm:p-6">
-        <div className="mb-6 rounded-md border border-slate-200 bg-white p-6 shadow-sm">
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
-            Practice lab
+        <div className="motion-rise mb-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm product-surface dark:border-slate-800">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-600 dark:text-teal-400">
+            Adaptive practice
           </p>
-          <h1 className="mt-2 text-3xl font-black tracking-normal text-slate-950">
-            Quiz yourself with local generated prompts.
+          <h1 className="mt-2 text-3xl font-black tracking-normal text-balance text-slate-950 dark:text-slate-50">
+            Quiz yourself with instant, adaptive questions.
           </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-            The demo quiz engine works without paid AI keys, saves attempts, and keeps
-            topic activity visible.
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-pretty text-slate-600 dark:text-slate-400">
+            The practice engine builds quizzes on any topic in seconds, saves every
+            attempt, and keeps your trending subjects in view.
           </p>
         </div>
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
+        <div className="motion-rise-delay-1 mt-4 grid gap-4 md:grid-cols-2">
           <QuizMeCard />
           <HistoryCard />
         </div>
-        <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <div className="motion-rise-delay-2 mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-7">
           <HotTopicsCard />
           <RecentActivityCard />
         </div>
