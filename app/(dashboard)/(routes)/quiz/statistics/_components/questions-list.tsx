@@ -76,9 +76,9 @@ const QuestionsList = ({
                       </TableCell>
                     )}
 
-                    {percentageCorrect && (
+                    {questions[0].questionType === "open_ended" && (
                       <TableCell className="text-right tabular-nums text-slate-700 dark:text-slate-300">
-                        {percentageCorrect}
+                        {percentageCorrect ?? 0}
                       </TableCell>
                     )}
                   </TableRow>

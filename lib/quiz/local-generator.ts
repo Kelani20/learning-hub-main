@@ -21,6 +21,15 @@ const distractors = [
   "Use only one source",
 ];
 
+function shuffle<T>(items: T[]): T[] {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
 export function generateLocalQuestions(
   topic: string,
   amount: number,
@@ -34,15 +43,16 @@ export function generateLocalQuestions(
       return { question, answer };
     }
 
+    // Shuffle so the correct answer is not always the first option.
     return {
       question,
       answer,
-      options: [
+      options: shuffle([
         answer,
         distractors[index % distractors.length],
         distractors[(index + 1) % distractors.length],
         distractors[(index + 2) % distractors.length],
-      ],
+      ]),
     };
   });
 }

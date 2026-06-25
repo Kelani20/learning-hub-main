@@ -1,8 +1,18 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { db } from "@/lib/db";
 import { createMuxAsset, deleteMuxAsset } from "@/lib/video";
+
+// Whitelist the columns a client may edit so an arbitrary request body cannot
+// mass-assign other Chapter fields (e.g. position, courseId, isPublished).
+const chapterUpdateSchema = z.object({
+  title: z.string().min(1).optional(),
+  description: z.string().nullable().optional(),
+  videoUrl: z.string().nullable().optional(),
+  isFree: z.boolean().optional(),
+});
 
 export async function PATCH(
   req: Request,
@@ -11,11 +21,18 @@ export async function PATCH(
   try {
     const { courseId, chapterId } = await params;
     const { userId } = await auth();
-    const { isPublished, ...values } = await req.json();
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+
+    const parsed = chapterUpdateSchema.safeParse(await req.json().catch(() => null));
+
+    if (!parsed.success) {
+      return new NextResponse("Invalid request", { status: 400 });
+    }
+
+    const values = parsed.data;
 
     const courseOwner = await db.course.findUnique({
       where: {

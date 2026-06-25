@@ -39,6 +39,7 @@ export const SearchInput = () => {
       <Input
         onChange={(e) => setValue(e.target.value)}
         value={value}
+        aria-label="Search for a course"
         className="h-10 w-full rounded-full border-slate-200 bg-slate-100 pl-9 text-sm shadow-none transition focus-visible:border-teal-500 focus-visible:ring-teal-500/40 dark:border-slate-800 dark:bg-slate-900"
         placeholder="Search for a course"
       />

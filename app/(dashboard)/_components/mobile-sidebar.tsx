@@ -1,8 +1,9 @@
 import { Menu } from "lucide-react";
 
-import { 
+import {
   Sheet,
   SheetContent,
+  SheetTitle,
   SheetTrigger
 } from "@/components/ui/sheet";
 import Sidebar from "./sidebar";
@@ -17,6 +18,7 @@ const MobileSidebar = () => {
         <Menu className="h-5 w-5" />
       </SheetTrigger>
       <SheetContent side="left" className="w-64 border-0 bg-slate-950 p-0">
+        <SheetTitle className="sr-only">Navigation menu</SheetTitle>
         <Sidebar />
       </SheetContent>
     </Sheet>

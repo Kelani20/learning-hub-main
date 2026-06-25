@@ -44,7 +44,23 @@ const envSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: optionalString,
 });
 
-export const env = envSchema.parse(process.env);
+function loadEnv() {
+  const parsed = envSchema.safeParse(process.env);
+
+  if (parsed.success) {
+    return parsed.data;
+  }
+
+  // A malformed/typo'd env var should not hard-crash the entire app (including
+  // the public landing page). Log loudly and fall back to safe defaults.
+  console.error(
+    "[ENV] Invalid environment configuration, falling back to defaults:",
+    parsed.error.flatten().fieldErrors
+  );
+  return envSchema.parse({});
+}
+
+export const env = loadEnv();
 
 export const isDemoMode = env.NEXT_PUBLIC_DEMO_MODE;
 export const hasDatabaseUrl = !!env.DATABASE_URL;

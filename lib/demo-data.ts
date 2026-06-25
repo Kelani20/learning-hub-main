@@ -387,10 +387,9 @@ export function getDemoGameWithQuestions(
   );
 
   const questions = generatedQuestions.map((question, index): Question => {
-    const demoAnswer =
-      parsedGame.type === GameType.mcq
-        ? question.options?.[0] ?? question.answer
-        : question.answer;
+    // The correct answer is always question.answer. (Do not read options[0] —
+    // options are shuffled, so index 0 is not necessarily the right answer.)
+    const demoAnswer = question.answer;
 
     return {
       id: `demo-question-${index}-${gameId}`,

@@ -12,9 +12,145 @@ export function makeDiscussionSlug(title: string) {
   );
 }
 
+type DemoMessage = {
+  id: string;
+  threadId: string;
+  authorId: string;
+  body: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type DemoThread = {
+  id: string;
+  title: string;
+  slug: string;
+  authorId: string;
+  courseId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  course: {
+    id: string;
+    userId: string;
+    title: string;
+    description: string | null;
+    imageUrl: string | null;
+    price: number | null;
+    isPublished: boolean;
+    categoryId: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  } | null;
+  messages: DemoMessage[];
+};
+
+// In demo mode without a database, keep discussions in memory for the life of
+// the server process. This makes "create thread" and "reply" actually persist
+// within a session instead of silently vanishing on the next refresh.
+let demoThreadStore: DemoThread[] | null = null;
+
+function demoThreads(): DemoThread[] {
+  if (!demoThreadStore) {
+    demoThreadStore = [
+      {
+        id: "thread_demo_ai_workflow",
+        title: "How should I structure an AI-assisted study workflow?",
+        slug: "ai-assisted-study-workflow-demo",
+        authorId: "demo_learner",
+        courseId: "course_ai_productivity",
+        createdAt: demoThreadCreatedAt,
+        updatedAt: demoThreadCreatedAt,
+        course: {
+          id: "course_ai_productivity",
+          userId: "demo_instructor",
+          title: "AI Productivity Systems",
+          description:
+            "Build a practical learning workflow with AI assistants, focused prompts, and review loops.",
+          imageUrl:
+            "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1600&auto=format&fit=crop",
+          price: 0,
+          isPublished: true,
+          categoryId: "cat_ai",
+          createdAt: demoThreadCreatedAt,
+          updatedAt: demoThreadCreatedAt,
+        },
+        messages: [
+          {
+            id: "message_demo_question",
+            threadId: "thread_demo_ai_workflow",
+            authorId: "demo_learner",
+            body: "I want a workflow that helps me learn faster without blindly trusting generated answers.",
+            createdAt: demoThreadCreatedAt,
+            updatedAt: demoThreadCreatedAt,
+          },
+          {
+            id: "message_demo_answer",
+            threadId: "thread_demo_ai_workflow",
+            authorId: "demo_instructor",
+            body: "Start with a question, ask for contrasting approaches, then write your own summary before checking the model's critique.",
+            createdAt: demoThreadCreatedAt,
+            updatedAt: demoThreadCreatedAt,
+          },
+        ],
+      },
+    ];
+  }
+
+  return demoThreadStore;
+}
+
+function createDemoThread(authorId: string, title: string, slug: string): DemoThread {
+  const now = new Date();
+  const thread: DemoThread = {
+    id: `thread_${slug}`,
+    title,
+    slug,
+    authorId,
+    courseId: null,
+    createdAt: now,
+    updatedAt: now,
+    course: null,
+    messages: [
+      {
+        id: `message_${slug}`,
+        threadId: `thread_${slug}`,
+        authorId,
+        body: "Starting the discussion.",
+        createdAt: now,
+        updatedAt: now,
+      },
+    ],
+  };
+
+  demoThreads().unshift(thread);
+  return thread;
+}
+
+function createDemoMessage(authorId: string, threadId: string, body: string): DemoMessage {
+  const now = new Date();
+  const message: DemoMessage = {
+    id: `message_${now.getTime()}`,
+    threadId,
+    authorId,
+    body,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const thread = demoThreads().find((item) => item.id === threadId);
+  if (thread) {
+    thread.messages.push(message);
+    thread.updatedAt = now;
+  }
+
+  return message;
+}
+
 export async function listDiscussionThreads() {
   if (isDemoMode && !hasDatabaseUrl) {
-    return getDemoDiscussionThreads();
+    return [...demoThreads()].sort(
+      (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+    );
   }
 
   try {
@@ -39,78 +175,16 @@ export async function listDiscussionThreads() {
     console.log("[DISCUSSION_THREADS]", error);
   }
 
-  return getDemoDiscussionThreads();
-}
-
-function getDemoDiscussionThreads() {
-  return [
-    {
-      id: "thread_demo_ai_workflow",
-      title: "How should I structure an AI-assisted study workflow?",
-      slug: "ai-assisted-study-workflow-demo",
-      authorId: "demo_learner",
-      courseId: "course_ai_productivity",
-      createdAt: demoThreadCreatedAt,
-      updatedAt: demoThreadCreatedAt,
-      course: {
-        id: "course_ai_productivity",
-        userId: "demo_instructor",
-        title: "AI Productivity Systems",
-        description:
-          "Build a practical learning workflow with AI assistants, focused prompts, and review loops.",
-        imageUrl:
-          "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1600&auto=format&fit=crop",
-        price: 0,
-        isPublished: true,
-        categoryId: "cat_ai",
-        createdAt: demoThreadCreatedAt,
-        updatedAt: demoThreadCreatedAt,
-      },
-      messages: [
-        {
-          id: "message_demo_question",
-          threadId: "thread_demo_ai_workflow",
-          authorId: "demo_learner",
-          body: "I want a workflow that helps me learn faster without blindly trusting generated answers.",
-          createdAt: demoThreadCreatedAt,
-          updatedAt: demoThreadCreatedAt,
-        },
-        {
-          id: "message_demo_answer",
-          threadId: "thread_demo_ai_workflow",
-          authorId: "demo_instructor",
-          body: "Start with a question, ask for contrasting approaches, then write your own summary before checking the model's critique.",
-          createdAt: demoThreadCreatedAt,
-          updatedAt: demoThreadCreatedAt,
-        },
-      ],
-    },
-  ];
+  return [...demoThreads()].sort(
+    (a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()
+  );
 }
 
 export async function createDiscussionThread(authorId: string, title: string) {
   const slug = `${makeDiscussionSlug(title)}-${Date.now()}`;
 
   if (isDemoMode && !hasDatabaseUrl) {
-    return {
-      id: `thread_${slug}`,
-      title,
-      slug,
-      authorId,
-      courseId: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      messages: [
-        {
-          id: `message_${slug}`,
-          threadId: `thread_${slug}`,
-          authorId,
-          body: "Starting the discussion.",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-    };
+    return createDemoThread(authorId, title, slug);
   }
 
   try {
@@ -133,25 +207,7 @@ export async function createDiscussionThread(authorId: string, title: string) {
   } catch (error) {
     if (!isDemoMode) throw error;
 
-    return {
-      id: `thread_${slug}`,
-      title,
-      slug,
-      authorId,
-      courseId: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      messages: [
-        {
-          id: `message_${slug}`,
-          threadId: `thread_${slug}`,
-          authorId,
-          body: "Starting the discussion.",
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-    };
+    return createDemoThread(authorId, title, slug);
   }
 }
 
@@ -161,14 +217,7 @@ export async function addDiscussionMessage(
   body: string
 ) {
   if (isDemoMode && !hasDatabaseUrl) {
-    return {
-      id: `message_${Date.now()}`,
-      authorId,
-      threadId,
-      body,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    return createDemoMessage(authorId, threadId, body);
   }
 
   try {
@@ -182,13 +231,6 @@ export async function addDiscussionMessage(
   } catch (error) {
     if (!isDemoMode) throw error;
 
-    return {
-      id: `message_${Date.now()}`,
-      authorId,
-      threadId,
-      body,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+    return createDemoMessage(authorId, threadId, body);
   }
 }

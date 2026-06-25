@@ -49,12 +49,18 @@ export async function POST(req: Request) {
       });
     }
 
-    await db.purchase.create({
-      data: {
-        courseId: courseId,
-        userId: userId,
-      },
-    });
+    try {
+      // Idempotent: Stripe retries deliver the same event, so upsert instead of
+      // create to avoid a unique-constraint crash (and an infinite retry loop).
+      await db.purchase.upsert({
+        where: { userId_courseId: { userId, courseId } },
+        update: {},
+        create: { courseId, userId },
+      });
+    } catch (error) {
+      console.log("[STRIPE_WEBHOOK]", error);
+      return new NextResponse("Webhook handler failed", { status: 500 });
+    }
   } else {
     return new NextResponse(
       `Webhook Error: Unhandled event type ${event.type}`,

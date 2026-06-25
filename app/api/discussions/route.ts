@@ -13,14 +13,24 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const { userId } = await auth();
+  try {
+    const { userId } = await auth();
 
-  if (!userId) {
-    return new NextResponse("Unauthorized", { status: 401 });
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const parsed = threadSchema.safeParse(await req.json().catch(() => null));
+
+    if (!parsed.success) {
+      return new NextResponse("Invalid request", { status: 400 });
+    }
+
+    const thread = await createDiscussionThread(userId, parsed.data.title);
+
+    return NextResponse.json(thread);
+  } catch (error) {
+    console.log("[DISCUSSIONS_POST]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
-
-  const { title } = threadSchema.parse(await req.json());
-  const thread = await createDiscussionThread(userId, title);
-
-  return NextResponse.json(thread);
 }

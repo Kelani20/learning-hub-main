@@ -22,12 +22,16 @@ type DashboardCourses = {
 };
 
 const getDemoDashboardCourses = (): DashboardCourses => {
-  const courses = demoCourses.map((course) => ({
-    ...course,
-    category: getDemoCategory(course.categoryId)!,
-    chapters: getDemoChapters(course.id),
-    progress: getDemoProgress(course.id),
-  })) as CourseWithProgressWithCategory[];
+  const courses = demoCourses
+    .map((course) => ({
+      ...course,
+      category: getDemoCategory(course.categoryId)!,
+      chapters: getDemoChapters(course.id),
+      progress: getDemoProgress(course.id),
+    }))
+    // Only courses the demo learner is actually enrolled in (i.e. have
+    // progress) belong on the dashboard — the rest live in the catalog.
+    .filter((course) => course.progress !== null) as CourseWithProgressWithCategory[];
 
   return {
     completedCourses: courses.filter((course) => course.progress === 100),
@@ -67,10 +71,13 @@ export const getDashboardCourses = async (
       return getDemoDashboardCourses();
     }
 
-    for (let course of courses) {
-      const progress = await getProgress(userId, course.id);
-      course["progress"] = progress;
-    }
+    // Resolve progress for all courses in parallel instead of a sequential
+    // await-in-loop (avoids an N+1 round-trip on dashboard load).
+    await Promise.all(
+      courses.map(async (course) => {
+        course["progress"] = await getProgress(userId, course.id);
+      })
+    );
 
     const completedCourses = courses.filter((course) => course.progress === 100);
     const coursesInProgress = courses.filter((course) => (course.progress ?? 0) < 100);

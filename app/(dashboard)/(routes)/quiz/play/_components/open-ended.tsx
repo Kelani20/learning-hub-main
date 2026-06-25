@@ -79,10 +79,22 @@ const OpenEnded = ({
   const [now, setNow] = useState(new Date());
   const { mutate: checkAnswer, isPending: isChecking } = useMutation({
     mutationFn: async () => {
-      let filledAnswer = blankAnswer;
-      document.querySelectorAll<HTMLInputElement>("#user-blank-input").forEach((input) => {
-        filledAnswer = input.value;
-        (input as HTMLInputElement).value = "";
+      // Rebuild the full answer by dropping each blank input back into the
+      // template, so multi-blank questions score against the whole answer
+      // (previously only the last blank was ever submitted).
+      const blank = "_____";
+      const parts = blankAnswer.split(blank);
+      const inputs = Array.from(
+        document.querySelectorAll<HTMLInputElement>("#user-blank-input")
+      );
+      let filledAnswer = "";
+      parts.forEach((part, index) => {
+        filledAnswer += part;
+        const input = inputs[index];
+        if (input) {
+          filledAnswer += input.value;
+          input.value = "";
+        }
       });
 
       if (game.id.startsWith("demo-")) {
@@ -116,8 +128,10 @@ const OpenEnded = ({
     checkAnswer(undefined, {
       onSuccess: ({ percentageSimilar }) => {
         toast(`Your answer is ${percentageSimilar}% similar to the correct answer`);
+        // Running mean: prev is the average over the `questionIndex` answers
+        // already scored, so weight it before folding in this answer.
         setAveragePercentage((prev) => {
-          return (prev + percentageSimilar) / (questionIndex + 1);
+          return (prev * questionIndex + percentageSimilar) / (questionIndex + 1);
         });
 
         if (questionIndex === game.questions.length - 1) {

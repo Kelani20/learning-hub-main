@@ -93,31 +93,34 @@ export function DemoCheckout({ course }: DemoCheckoutProps) {
 
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
               <div className="sm:col-span-2">
-                <label className="inline-flex items-center gap-x-1.5 text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+                <label htmlFor="demo-card-number" className="inline-flex items-center gap-x-1.5 text-xs font-black uppercase tracking-[0.14em] text-slate-500">
                   <CreditCard className="h-3.5 w-3.5" />
                   Card number
                 </label>
                 <Input
+                  id="demo-card-number"
                   value="4242 4242 4242 4242"
                   readOnly
                   className="mt-2 h-12 bg-white font-semibold dark:bg-slate-950"
                 />
               </div>
               <div>
-                <label className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+                <label htmlFor="demo-card-expiry" className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
                   Expiry
                 </label>
                 <Input
+                  id="demo-card-expiry"
                   value="12 / 30"
                   readOnly
                   className="mt-2 h-12 bg-white font-semibold dark:bg-slate-950"
                 />
               </div>
               <div>
-                <label className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+                <label htmlFor="demo-card-cvc" className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
                   CVC
                 </label>
                 <Input
+                  id="demo-card-cvc"
                   value="123"
                   readOnly
                   className="mt-2 h-12 bg-white font-semibold dark:bg-slate-950"

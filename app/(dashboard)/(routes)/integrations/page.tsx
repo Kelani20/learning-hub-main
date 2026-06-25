@@ -32,6 +32,7 @@ import {
 } from "@/lib/connectors";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { InstructorCta } from "@/components/auth/instructor-cta";
 
 const categoryOrder: ConnectorCategory[] = [
   "Core learning",
@@ -116,12 +117,10 @@ const IntegrationsPage = () => {
               provider, and extend the platform without touching the core learning flow.
             </p>
             <div className="mt-6 flex flex-col gap-2 sm:flex-row">
-              <Link href="/admin/courses">
-                <Button className="keep-light h-11 cursor-pointer rounded-full bg-brand-500 px-5 font-bold text-white shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-600 hover:shadow-lg">
-                  Open instructor studio
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+              <InstructorCta className="h-11 rounded-full bg-brand-600 px-5 font-bold text-white shadow-glow transition-all duration-200 hover:-translate-y-0.5 hover:bg-brand-500 hover:shadow-lg">
+                Open instructor studio
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </InstructorCta>
               <Link href="/dashboard">
                 <Button
                   variant="outline"

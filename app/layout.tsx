@@ -49,9 +49,8 @@ export const metadata: Metadata = {
     description:
       "A full-stack learning platform with courses, adaptive practice, discussions, and instructor analytics.",
   },
-  icons: {
-    icon: "/icon.svg",
-  },
+  // Icons are auto-detected from app/icon.svg and app/favicon.ico — no explicit
+  // entry needed (avoids a duplicate <link rel="icon">).
 };
 
 export const viewport: Viewport = {

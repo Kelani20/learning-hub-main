@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 import { DemoUserButton } from "@/components/auth/demo-user-button";
+import { InstructorCta } from "@/components/auth/instructor-cta";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/search-input";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -40,17 +41,15 @@ const NavbarRoutes = () => {
             </Button>
           </Link>
         ) : (
-          <Link href="/admin/courses">
-            <Button
-              size="sm"
-              variant="ghost"
-              aria-label="Open instructor view"
-              className="h-10 w-10 cursor-pointer rounded-full px-0 font-semibold transition hover:text-teal-600 dark:hover:text-teal-300 sm:w-auto sm:rounded-full sm:px-3"
-            >
-              <ShieldCheck className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Instructor View</span>
-            </Button>
-          </Link>
+          <InstructorCta
+            size="sm"
+            variant="ghost"
+            ariaLabel="Open instructor view"
+            className="h-10 w-10 rounded-full px-0 font-semibold transition hover:text-teal-600 dark:hover:text-teal-300 sm:w-auto sm:rounded-full sm:px-3"
+          >
+            <ShieldCheck className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Instructor View</span>
+          </InstructorCta>
         )}
         <DemoUserButton />
       </div>

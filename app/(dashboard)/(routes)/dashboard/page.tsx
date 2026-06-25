@@ -65,7 +65,7 @@ const DashboardPage = async () => {
             </p>
             <div className="mt-6 flex flex-col gap-2 sm:flex-row">
               <Link href={focusCourse ? `/courses/${focusCourse.id}` : "/browse"}>
-                <Button className="keep-light h-11 cursor-pointer rounded-full bg-teal-500 px-5 font-bold text-slate-950 shadow-glow transition hover:-translate-y-0.5 hover:bg-teal-400">
+                <Button className="h-11 cursor-pointer rounded-full bg-teal-600 px-5 font-bold text-white shadow-glow transition hover:-translate-y-0.5 hover:bg-teal-500">
                   Continue learning
                   <PlayCircle className="ml-2 h-4 w-4" />
                 </Button>

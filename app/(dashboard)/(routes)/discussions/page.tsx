@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { listDiscussionThreads } from "@/lib/discussions";
 
 import { DiscussionComposer } from "./_components/discussion-composer";
+import { ThreadReply } from "./_components/thread-reply";
 
 export const dynamic = "force-dynamic";
 
@@ -73,6 +74,7 @@ const DiscussionsPage = async () => {
                     <p className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-200">{message.body}</p>
                   </div>
                 ))}
+                <ThreadReply threadId={thread.id} />
               </CardContent>
             </Card>
           ))}

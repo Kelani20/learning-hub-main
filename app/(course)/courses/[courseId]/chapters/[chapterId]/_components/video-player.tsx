@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock, PlayCircle } from "lucide-react";
 import MuxPlayer from "@mux/mux-player-react";
@@ -21,6 +21,37 @@ interface VideoPlayerProps {
   title: string;
 }
 
+// Load the YouTube IFrame API once and resolve when it's ready. Resolves to the
+// global YT namespace, or rejects if it can't load (callers fall back silently).
+function loadYouTubeApi(): Promise<any> {
+  if (typeof window === "undefined") return Promise.reject();
+  const w = window as any;
+  if (w.YT?.Player) return Promise.resolve(w.YT);
+
+  if (!w.__lhYtApiPromise) {
+    w.__lhYtApiPromise = new Promise((resolve, reject) => {
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      tag.onerror = reject;
+      document.head.appendChild(tag);
+
+      let tries = 0;
+      const timer = setInterval(() => {
+        tries += 1;
+        if (w.YT?.Player) {
+          clearInterval(timer);
+          resolve(w.YT);
+        } else if (tries > 100) {
+          clearInterval(timer);
+          reject();
+        }
+      }, 100);
+    });
+  }
+
+  return w.__lhYtApiPromise;
+}
+
 export const VideoPlayer = ({
   playbackId,
   videoUrl,
@@ -34,6 +65,7 @@ export const VideoPlayer = ({
   const router = useRouter();
   const confetti = useConfettiStore();
   const [isReady, setIsReady] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const onEnd = async () => {
     try {
@@ -58,6 +90,57 @@ export const VideoPlayer = ({
     }
   };
 
+  // Keep the latest onEnd in a ref so the YouTube listener effect doesn't need
+  // to re-subscribe on every render.
+  const onEndRef = useRef(onEnd);
+  onEndRef.current = onEnd;
+
+  const isYouTube = !!videoUrl && videoUrl.includes("youtube.com/embed");
+  const iframeSrc = videoUrl
+    ? isYouTube
+      ? `${videoUrl}${videoUrl.includes("?") ? "&" : "?"}enablejsapi=1`
+      : videoUrl
+    : "";
+
+  // Auto-complete the chapter when a YouTube (iframe) video finishes — the
+  // Mux player wires this via onEnded, but the default URL provider needs the
+  // YouTube IFrame API. Purely additive: if it fails, the manual "Mark as
+  // complete" button still works.
+  useEffect(() => {
+    if (!completeOnEnd || isLocked || !isYouTube || !iframeRef.current) return;
+
+    let player: any;
+    let cancelled = false;
+
+    loadYouTubeApi()
+      .then((YT) => {
+        if (cancelled || !iframeRef.current) return;
+        try {
+          player = new YT.Player(iframeRef.current, {
+            events: {
+              onStateChange: (event: any) => {
+                if (event?.data === YT.PlayerState?.ENDED) {
+                  onEndRef.current();
+                }
+              },
+            },
+          });
+        } catch {
+          // Non-fatal — manual completion remains available.
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+      try {
+        player?.destroy?.();
+      } catch {
+        // ignore
+      }
+    };
+  }, [completeOnEnd, isLocked, isYouTube, iframeSrc]);
+
   return (
     <div className="relative aspect-video overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-sm dark:border-slate-800 dark:shadow-elevate-dark">
       {!isReady && !isLocked && (
@@ -79,8 +162,9 @@ export const VideoPlayer = ({
       )}
       {!isLocked && videoUrl && (
         <iframe
+          ref={iframeRef}
           title={title}
-          src={videoUrl}
+          src={iframeSrc}
           className={cn("h-full w-full border-0", !isReady && "hidden")}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

@@ -12,6 +12,25 @@ import { Chapter, MuxData } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { FileUpload } from "@/components/file-upload";
 
+// Pure, client-safe embed conversion (mirrors lib/video's toEmbeddableVideoUrl,
+// but kept local so we don't pull the server-only Mux SDK into the client).
+function toEmbedUrl(url?: string | null) {
+  if (!url) return "";
+  try {
+    if (url.includes("youtube.com/watch")) {
+      const id = new URL(url).searchParams.get("v");
+      return id ? `https://www.youtube.com/embed/${id}` : url;
+    }
+  } catch {
+    return url;
+  }
+  if (url.includes("youtu.be/")) {
+    const id = url.split("youtu.be/")[1]?.split(/[?&]/)[0];
+    return id ? `https://www.youtube.com/embed/${id}` : url;
+  }
+  return url;
+}
+
 interface ChapterVideoProps {
   initialData: Chapter & { muxData?: MuxData | null };
   courseId: string;
@@ -72,9 +91,17 @@ export const ChapterVideoForm = ({
           </div>
         ): (
           <div className="relative aspect-video mt-2 overflow-hidden rounded-xl">
-            <MuxPlayer
-              playbackId={initialData?.muxData?.playbackId || ""}
-            />
+            {initialData.muxData?.playbackId ? (
+              <MuxPlayer playbackId={initialData.muxData.playbackId} />
+            ) : (
+              <iframe
+                title="Chapter video preview"
+                src={toEmbedUrl(initialData.videoUrl)}
+                className="h-full w-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )}
           </div>
         )
       )}

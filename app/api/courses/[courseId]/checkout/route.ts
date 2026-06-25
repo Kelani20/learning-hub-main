@@ -45,6 +45,10 @@ export async function POST(
       return new NextResponse("Not found", { status: 404 });
     }
 
+    if (course.price == null || course.price <= 0) {
+      return new NextResponse("This course is not purchasable", { status: 400 });
+    }
+
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] = [
       {
         quantity: 1,
@@ -52,9 +56,10 @@ export async function POST(
           currency: "CAD",
           product_data: {
             name: course.title,
-            description: course.description!,
+            // Stripe rejects a null/empty description, so only send it when set.
+            ...(course.description ? { description: course.description } : {}),
           },
-          unit_amount: Math.round(course.price! * 100),
+          unit_amount: Math.round(course.price * 100),
         }
       }
     ];

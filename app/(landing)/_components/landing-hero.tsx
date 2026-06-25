@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { InstructorCta } from "@/components/auth/instructor-cta";
 
 export const LandingHero = () => {
   return (
@@ -47,11 +48,9 @@ export const LandingHero = () => {
                 <LogIn className="ml-2 h-4 w-4" />
               </Button>
             </Link>
-            <Link href="/admin/courses">
-              <Button variant="outline" className="h-12 cursor-pointer rounded-full border-slate-300 bg-white/85 px-6 text-base font-bold text-slate-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
-                Instructor view
-              </Button>
-            </Link>
+            <InstructorCta variant="outline" className="h-12 rounded-full border-slate-300 bg-white/85 px-6 text-base font-bold text-slate-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
+              Instructor view
+            </InstructorCta>
             <Link href="/integrations">
               <Button variant="outline" className="h-12 cursor-pointer rounded-full border-slate-300 bg-white/85 px-6 text-base font-bold text-slate-950 transition-all duration-200 hover:-translate-y-0.5 hover:bg-white dark:border-white/20 dark:bg-white/10 dark:text-white dark:hover:bg-white/20">
                 Integrations

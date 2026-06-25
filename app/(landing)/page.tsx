@@ -8,8 +8,10 @@ const LandingPage = () => {
   return (
     <div className="min-h-full bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-100">
       <LandingNavbar />
-      <LandingHero />
-      <LandingContent />
+      <main>
+        <LandingHero />
+        <LandingContent />
+      </main>
       <SiteFooter />
     </div>
   )

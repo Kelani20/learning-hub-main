@@ -126,20 +126,22 @@ export function DemoAuthPanel({
 
           <div className="mt-5 space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
             <div>
-              <label className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+              <label htmlFor="demo-email" className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
                 Email
               </label>
               <Input
+                id="demo-email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 className="mt-2 h-12 bg-white font-semibold dark:bg-slate-900"
               />
             </div>
             <div>
-              <label className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
+              <label htmlFor="demo-password" className="text-xs font-black uppercase tracking-[0.14em] text-slate-500">
                 Password
               </label>
               <Input
+                id="demo-password"
                 value="••••••••••"
                 readOnly
                 type="password"
